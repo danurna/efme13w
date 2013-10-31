@@ -1,1 +1,52 @@
 regionblobs funktion
+
+watchSTATS = 
+
+               Area: 26414
+           Centroid: [242.7192 89.9794]
+        BoundingBox: [24.5000 38.5000 424 109]
+        SubarrayIdx: {[1x109 double]  [1x424 double]}
+    MajorAxisLength: 452.5190
+    MinorAxisLength: 81.0665
+       Eccentricity: 0.9838
+        Orientation: 1.4233
+         ConvexHull: [73x2 double]
+        ConvexImage: [109x424 logical]
+         ConvexArea: 33978
+              Image: [109x424 logical]
+        FilledImage: [109x424 logical]
+         FilledArea: 26414
+        EulerNumber: 1
+            Extrema: [8x2 double]
+      EquivDiameter: 183.3885
+           Solidity: 0.7774
+             Extent: 0.5715
+       PixelIdxList: [26414x1 double]
+          PixelList: [26414x2 double]
+          Perimeter: 1.0133e+03
+
+
+batSTATS = 
+
+               Area: 89600
+           Centroid: [303.9429 305.0130]
+        BoundingBox: [82.5000 16.5000 513 501]
+        SubarrayIdx: {[1x501 double]  [1x513 double]}
+    MajorAxisLength: 611.4201
+    MinorAxisLength: 296.1420
+       Eccentricity: 0.8749
+        Orientation: -46.2135
+         ConvexHull: [52x2 double]
+        ConvexImage: [501x513 logical]
+         ConvexArea: 138535
+              Image: [501x513 logical]
+        FilledImage: [501x513 logical]
+         FilledArea: 89603
+        EulerNumber: -2
+            Extrema: [8x2 double]
+      EquivDiameter: 337.7607
+           Solidity: 0.6468
+             Extent: 0.3486
+       PixelIdxList: [89600x1 double]
+          PixelList: [89600x2 double]
+          Perimeter: 2.4098e+03

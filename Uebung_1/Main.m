@@ -6,13 +6,15 @@ for i = 1 : size( watches, 1 )
     watchStatsDB{i} = regionprops(watches{i},'all');
     batStatsDB{i} = regionprops(bats{i},'all');
 end
+
 watchSTATS = watchStatsDB{1,1}
 batSTATS = batStatsDB{1,1}
 figure;
 
 for j = 1 : 20
-    watchArea{j} = cell2mat(watchStatsDB{1,j}.Area(0));
-    watchFilledArea{j} = cell2mat(watchStatsDB{1,j}.FilledArea(0));
+    watchArea{j} = watchStatsDB{1,j}.Area;
+    watchFilledArea{j} = watchStatsDB{1,j}.FilledArea;
 end
-plot(watchArea,watchFilledArea,'--rs');
+
 %-- Linien Art, r rot, s square
+plot(cell2mat(watchArea), cell2mat(watchFilledArea), '--rs');
