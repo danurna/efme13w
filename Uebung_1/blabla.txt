@@ -50,3 +50,6 @@ batSTATS =
        PixelIdxList: [89600x1 double]
           PixelList: [89600x2 double]
           Perimeter: 2.4098e+03
+
+Elapsed time with initialization of variables (e.g. batArea = cell(dataSize)) ~1.8 sec
+Elapsed time without initialization of variables (e.g. batArea = cell(dataSize)) ~1.9 sec

@@ -1,8 +1,13 @@
+tic; % Start timer.
 clear; 
 watches = read_images('watch', 'MPEG7_CE-Shape-1_Part_B');
 bats = read_images('bat', 'MPEG7_CE-Shape-1_Part_B');
+dataSize = size( watches, 1 );
 
-for i = 1 : size( watches, 1 )
+%-- Init with length
+watchStatsDB = cell(1, dataSize);
+batStatsDB = cell(1, dataSize);
+for i = 1 : dataSize
     watchStatsDB{i} = regionprops(watches{i},'all');
     batStatsDB{i} = regionprops(bats{i},'all');
 end
@@ -11,15 +16,23 @@ watchSTATS = watchStatsDB{1,1}
 batSTATS = batStatsDB{1,1}
 figure;
 
-for j = 1 : 20
+%-- Init with length
+watchArea = cell(dataSize);
+watchFilledArea = cell(dataSize);
+for j = 1 : dataSize
     watchArea{j} = watchStatsDB{1,j}.Area;
     watchFilledArea{j} = watchStatsDB{1,j}.FilledArea;
 end
 
-for j = 1 : 20
+%-- Init with length
+batArea = cell(dataSize);
+batFilledArea = cell(dataSize);
+for j = 1 : dataSize
     batArea{j} = batStatsDB{1,j}.Area;
     batFilledArea{j} = batStatsDB{1,j}.FilledArea;
 end
+
+toc; % End timer.
 
 %-- Linien Art, r rot, s square
 %-- plot (x, y) 
