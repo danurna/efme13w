@@ -1,4 +1,4 @@
 clear; 
-filenames = { 'watch', 'brick' }; % 'crown', 'brick', 'apple', 'key', 'fork', 'pencil', 'fountain', 'hammer', 'bone' };
+filenames = { 'watch', 'brick', 'crown', 'key' }; % 'crown', 'brick', 'apple', 'key', 'fork', 'pencil', 'fountain', 'hammer', 'bone' };
 dataStruct = readImagesAndCalculateProps(filenames);
-showHist(dataStruct, filenames, 'Solidity');
+showHist(dataStruct, filenames, 'formfactor');
