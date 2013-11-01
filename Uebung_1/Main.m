@@ -4,8 +4,8 @@ bats = read_images('bat', 'MPEG7_CE-Shape-1_Part_B');
 dataSize = size( watches, 1 );
 
 %-- Init with length
-watchStatsDB = cell(dataSize);
-batStatsDB = cell(dataSize);
+watchStatsDB = cell(dataSize, 1);
+batStatsDB = cell(dataSize, 1);
 for i = 1 : dataSize
     watchStatsDB{i} = regionprops(watches{i},'all');
     batStatsDB{i} = regionprops(bats{i},'all');
