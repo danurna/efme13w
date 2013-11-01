@@ -1,7 +1,7 @@
-function [I] = read_images(filename, directoryPath)
+function [I] = read_images(filename)
     l = length(filename);
     
-    D = dir(directoryPath) ;
+    D = dir('MPEG7_CE-Shape-1_Part_B') ;
     I = cell( 20 , 1 ) ;
     j = 1;
     
