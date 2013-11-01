@@ -8,5 +8,6 @@ function showHist(dataStruct, dataName, propName)
     end
 
     hist(c);
+    c
     legend(dataName);
 end
