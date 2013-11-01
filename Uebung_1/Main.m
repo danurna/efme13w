@@ -28,20 +28,20 @@ fountainsStatsDB = cell(dataSize, 1);
 hammersStatsDB = cell(dataSize, 1);
 
 for i = 1 : dataSize
-    watchesStatsDB{i} = regionprops(watches{i},'all');
-    batsStatsDB{i} = regionprops(bats{i},'all');
-    crownsStatsDB{i} = regionprops(crowns{i},'all');
-    bricksStatsDB{i} = regionprops(bricks{i},'all');
-    applesStatsDB{i} = regionprops(apples{i},'all');
-    keysStatsDB{i} = regionprops(keys{i},'all');
-    forksStatsDB{i} = regionprops(forks{i},'all');
-    pencilsStatsDB{i} = regionprops(pencils{i},'all');
-    bonesStatsDB{i} = regionprops(bones{i},'all');
-    fountainsStatsDB{i} = regionprops(fountains{i},'all');
-    hammersStatsDB{i} = regionprops(hammers{i},'all');
+    watchesStatsDB{i} = getProps(watches{i});
+    batsStatsDB{i} = getProps(bats{i});
+    crownsStatsDB{i} = getProps(crowns{i});
+    bricksStatsDB{i} = getProps(bricks{i});
+    applesStatsDB{i} = getProps(apples{i});
+    keysStatsDB{i} = getProps(keys{i});
+    forksStatsDB{i} = getProps(forks{i});
+    pencilsStatsDB{i} = getProps(pencils{i});
+    bonesStatsDB{i} = getProps(bones{i});
+    fountainsStatsDB{i} = getProps(fountains{i});
+    hammersStatsDB{i} = getProps(hammers{i});
 end
 
-propName = 'Solidity';
+propName = 'formfactor';
 
 hist( [ getFeatureVector(watchesStatsDB, propName), ...
         getFeatureVector(batsStatsDB, propName), ... 
