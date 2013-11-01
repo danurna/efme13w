@@ -1,0 +1,18 @@
+Folgende Klassen sollen unterschieden werden:
+
+Äpfel
+Crowns
+Bone*
+Brick
+Fork
+Fountain
+Hammer
+Key
+Pencil
+Watch
+
+Welche Merkmale sollen nicht verwendet werden?
+
+- Perimeter (nicht Skalierungsinvariant)
+- Fläche (nicht Skalierungsinvariant)
+- Centroid (nicht Rotationsinvariant)
