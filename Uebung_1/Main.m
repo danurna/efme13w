@@ -1,6 +1,6 @@
 clear; 
-watches = read_images('watch', 'MPEG7_CE-Shape-1_Part_B');
-bats = read_images('bat', 'MPEG7_CE-Shape-1_Part_B');
+watches = read_images('watch');
+bats = read_images('bat');
 dataSize = size( watches, 1 );
 
 %-- Init with length
