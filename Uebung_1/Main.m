@@ -1,15 +1,16 @@
 clear; 
-watches = read_images('watch', 'MPEG7_CE-Shape-1_Part_B');
-bats = read_images('bat', 'MPEG7_CE-Shape-1_Part_B');
-crowns = read_images('crown', 'MPEG7_CE-Shape-1_Part_B');
-bricks = read_images('brick', 'MPEG7_CE-Shape-1_Part_B');
-apples = read_images('apple', 'MPEG7_CE-Shape-1_Part_B');
-keys = read_images('key', 'MPEG7_CE-Shape-1_Part_B');
-forks = read_images('fork', 'MPEG7_CE-Shape-1_Part_B');
-pencils = read_images('pencil', 'MPEG7_CE-Shape-1_Part_B');
-bones = read_images('Bone', 'MPEG7_CE-Shape-1_Part_B');
-fountains = read_images('fountain', 'MPEG7_CE-Shape-1_Part_B');
-hammers = read_images('hammer', 'MPEG7_CE-Shape-1_Part_B');
+watches = read_images('watch');
+bats = read_images('bat');
+crowns = read_images('crown');
+bricks = read_images('brick');
+apples = read_images('apple');
+keys = read_images('key');
+forks = read_images('fork');
+pencils = read_images('pencil');
+bones = read_images('Bone');
+fountains = read_images('fountain');
+hammers = read_images('hammer');
+
 
 dataSize = size( watches, 1 );
 %
