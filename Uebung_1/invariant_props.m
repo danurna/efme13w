@@ -3,5 +3,4 @@ function [I] = invariant_props(regionprops)
     I.roundness = 4*regionprops.Area/(pi*regionprops.MajorAxisLength^2);
     I.compactness = sqrt(I.roundness);
     I.aspectratio = regionprops.MinorAxisLength/regionprops.MajorAxisLength;
-   
 end
