@@ -1,4 +1,4 @@
-function [testClassified] = knn(train, test, trainClassified, k)
+function [testClassified] = knn(test, train, trainClassified, k)
 
     if nargin < 3
         error('knn expects at least 3 input arguments');
