@@ -29,8 +29,8 @@ function [SAMPLECLASSES] = knn(SAMPLE, TRAIN, TRAINCLASSES, K, LOOCV)
             K = 1;
             LOOCV = false;
         case 4
-            if(~isinteger(K) || K < 1)
-               error('K must be an integer value bigger or equal to 1'); 
+            if(~isnumeric(K) || K < 1)
+               error('K must be an numeric value bigger or equal to 1'); 
             end
             LOOCV = false;
         case 5
