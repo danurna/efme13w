@@ -14,7 +14,7 @@ function [testClassified] = knn(test, train, trainClassified, k)
     end
     
     if trainSize ~= size(trainClassified,1)
-        error('training set and training classified need to have same number of rows');
+        error('training set and trainClassified need to have same number of rows');
     end
     
     if k > trainSize
