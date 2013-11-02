@@ -1,4 +1,4 @@
-function [testClassified] = knn(test, train, trainClassified, k)
+function [testClassified] = knn(test, train, trainClassified, k, LOOCV)
 
     if nargin < 3
         error('knn expects at least 3 input arguments');
@@ -31,7 +31,11 @@ function [testClassified] = knn(test, train, trainClassified, k)
     for i = 1 : testSize
        for j = 1 : k
            [~, minIndex] = sort(dist(i,:));
-           kClasses(j) = trainClassified(minIndex(j));
+           ix = j;
+           if LOOCV
+               ix = j+1;
+           end
+           kClasses(j) = trainClassified(minIndex(ix));
        end
        
        [uniqueValues, ~, valueMap] = unique(kClasses);
