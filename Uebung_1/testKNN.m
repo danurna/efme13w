@@ -7,7 +7,7 @@ function testKNN()
 
 
     for k = 1 : 10
-        figure;
+        figure(k);
         gscatter(training(:,1),training(:,2),group,'mc'); hold on;
         legend('Training Class 1', 'Training Class 2');
         title(k);
