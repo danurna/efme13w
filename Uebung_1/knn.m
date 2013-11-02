@@ -31,7 +31,7 @@ function [testClassified] = knn(test, train, trainClassified, k)
     for i = 1 : testSize
        for j = 1 : k
            [~, minIndex] = sort(dist(i,:));
-           kClasses(k) = trainClassified(minIndex(k));
+           kClasses(j) = trainClassified(minIndex(j));
        end
        
        [uniqueValues, ~, valueMap] = unique(kClasses);
@@ -41,6 +41,7 @@ function [testClassified] = knn(test, train, trainClassified, k)
            for j = 1 : k
               if ismember(valueMap(j),C{1})
                   M = valueMap(j);
+                  break;
               end
            end
        end
