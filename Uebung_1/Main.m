@@ -27,6 +27,7 @@ for j = 1 : numberOfClasses
         endValue = j * 20;
         c( startValue:endValue, 1) = dataStruct.(filenames{j});
 end 
-showScatter(dataStruct, filenames, 'roundness', 'Solidity');
+
+showScatter(dataStruct, filenames, 'roundness', 'Solidity');,
 simpleClassify(c, numberOfClasses);
 
