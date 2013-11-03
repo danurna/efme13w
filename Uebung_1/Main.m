@@ -40,14 +40,13 @@ title('Training data');
 
 % Display classified data by hardcoded thresholds.
 subplot(1, 3, 2);
-showScatter(TRAIN, TRAINCLASSES, fields{ix1}, fields{ix2});
 simpleC = simpleClassify(TRAIN, numberOfClasses);
 showScatter(TRAIN, simpleC, fields{ix1}, fields{ix2});
 title('Classified by "hand"');
 
 % Display classified data by knn.
 subplot(1, 3, 3);
-showScatter(TRAIN, TRAINCLASSES, fields{ix1}, fields{ix2});
-knnC = knn(TRAIN, TRAIN, TRAINCLASSES, 25, true);
+knnC = knn(TRAIN, TRAIN, TRAINCLASSES, 5, true);
 showScatter(TRAIN, knnC, fields{ix1}, fields{ix2});
 title('Classified by our K-NN. K = 5');
+
