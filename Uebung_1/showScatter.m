@@ -1,6 +1,12 @@
 function showScatter(DATA, DATACLASSES, labelx, labely)
+%showScatter plots a gscatter() - plot with sorted dataclasses, so that the
+%coloring will be the same as long as the DATACLASSES have the same
+%elements
 
-    gscatter(DATA(:,1),DATA(:,2),DATACLASSES, 'mcbrg');
+    [sortedClasses ix] = sort(DATACLASSES);
+    dataByClasses = DATA(ix,:);
+
+    gscatter(dataByClasses(:,1),dataByClasses(:,2),sortedClasses, 'mcbrg');
     legend('Location','NorthWest');
     xlabel(labelx);
     ylabel(labely);
