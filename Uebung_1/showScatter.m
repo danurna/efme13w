@@ -15,7 +15,7 @@ function showScatter(dataStruct, classNames, prop1, prop2)
         
     end
 
-    gscatter(c(:,1), c(:,2), classifiers, 'mcbry', 'o');
+    gscatter(c(:,1), c(:,2), classifiers, 'mcbrg', 'o');
     xlabel(prop1);
     ylabel(prop2);
 end

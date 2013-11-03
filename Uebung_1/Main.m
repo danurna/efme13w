@@ -1,4 +1,5 @@
 clear; 
+% Define and read data.
 filenames = { 'watch', 'brick', 'fork', 'fountain', 'apple' };
 dataStruct = readImagesAndCalculateProps(filenames);
 fields = {'formfactor', 'roundness', 'aspectratio', 'Solidity', 'compactness' };
@@ -32,8 +33,25 @@ end
 
 figure();
 suptitle('Data Classification');
+% Display raw, unclassified data
+subplot(1, 3, 1);
+showScatter(dataStruct, filenames, 'formfactor', 'roundness');
+title('Unclassified data');
+
+% Display classified data by hardcoded values.
+subplot(1, 3, 2);
 showScatter(dataStruct, filenames, 'formfactor', 'roundness');
 [props, classified] = simpleClassify(c, numberOfClasses);
 hold on;
-gscatter(props(:,1), props(:,2), classified, 'mcbry', 'x');
+gscatter(props(:,1), props(:,2), classified, 'mcbrg', 'x');
 hold off;
+title('Classified by "hand"');
+
+% Display classified data by knn.
+subplot(1, 3, 3);
+showScatter(dataStruct, filenames, 'formfactor', 'roundness');
+myC = knn(props, props, classified, 5, true);
+hold on;
+gscatter(props(:,1),props(:,2),myC,'mcbrg','x'); 
+hold off;
+title('Classified by our K-NN. K = 5');

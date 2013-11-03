@@ -19,3 +19,7 @@ Welche Merkmale sollen nicht verwendet werden?
 - Area (nicht Skalierungsinvariant)
 - FilledArea (nicht Skalierungsinvariant)
 - Orientation (nicht Rotationinvariant)
+
+
+ks?
+1, 3, 5, 10, 25
