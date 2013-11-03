@@ -32,7 +32,6 @@ for j = 1 : numberOfClasses
 end 
 
 figure();
-suptitle('Data Classification');
 % Display raw, unclassified data
 subplot(1, 3, 1);
 showScatter(dataStruct, filenames, 'formfactor', 'roundness');
