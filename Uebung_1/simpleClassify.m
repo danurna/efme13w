@@ -1,4 +1,4 @@
-function [properties, classified] = simpleClassify(sampleData, numberOfClasses)
+function classified = simpleClassify(sampleData, numberOfClasses)
 %simpleClassify - Classify sample data based on hardcoded classification values 
 %
 %  Detailed 
@@ -42,6 +42,4 @@ function [properties, classified] = simpleClassify(sampleData, numberOfClasses)
 
     end
 
-    % Put values to return. Classified is already fine.
-    properties = horzcat(prop1, prop2);
 end
