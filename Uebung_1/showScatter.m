@@ -9,10 +9,7 @@ function showScatter(dataStruct, classNames, prop1, prop2)
         endValue = j * 20;
         c( startValue:endValue, 1) = getFeatureVector( dataStruct.(classNames{j}), prop1);
         c( startValue:endValue, 2) = getFeatureVector( dataStruct.(classNames{j}), prop2);
-        for i = startValue : endValue
-            classifiers{i, 1} = classNames{j};
-        end
-        
+        classifiers(startValue:endValue) = classNames(j);
     end
 
     figure;
