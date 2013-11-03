@@ -4,7 +4,7 @@ function [SAMPLECLASSES] = knn(SAMPLE, TRAIN, TRAINCLASSES, K, LOOCV)
 %  Detailed 
 %     Each row in SAMPLE gets a class in SAMPLECLASSES based on the
 %     classification of the TRAIN set and TRAINCLASSES. Distances between
-%     entry points are measured with euclidian method. When classifying to
+%     entry points are measured with euclidean method. When classifying to
 %     more than two groups or when using an even value for K, it might be
 %     necessary to break a tie in the number of nearest neighbors. The
 %     algorithm uses the nearest neighbor among the tied groups to break
@@ -63,31 +63,46 @@ function [SAMPLECLASSES] = knn(SAMPLE, TRAIN, TRAINCLASSES, K, LOOCV)
     SAMPLECLASSES = TRAINCLASSES(1:testSize);
     kClasses = TRAINCLASSES(1:K);
     
+    %Pairwise euclidean distance between SAMPLE and TRAIN
+    %dist(i,j) is the distance between SAMPLE(i) and TRAIN(j)
     dist = pdist2(SAMPLE,TRAIN);
     
     for i = 1 : testSize
-       for j = 1 : K
-           [~, minIndex] = sort(dist(i,:));
-           ix = j;
-           if LOOCV
-               ix = j+1;
-           end
-           kClasses(j) = TRAINCLASSES(minIndex(ix));
-       end
+        %(asc) sort the distances from the sample i to each train vector
+        [~, minIndex] = sort(dist(i,:));
+        
+        for j = 1 : K
+            %collect classes for k nearest neighbors
+            ix = j;
+            
+            if LOOCV
+                %when doing LOOCV, distance 0 (same vector) is neglected
+                ix = j+1;
+            end
+            kClasses(j) = TRAINCLASSES(minIndex(ix));
+        end
+
+        %uniqueValues is selfexplanatory, valueMap is basically a numerical
+        %representation of kClasses.
+        %example:
+        %   when: kClasses = {'a','b','a'}
+        %   then: uniqueValues = {'a','b'}
+        %         valueMap = [1,2,1];
+        [uniqueValues, ~, valueMap] = unique(kClasses);
+        [M, ~, C] = mode(valueMap);
        
-       [uniqueValues, ~, valueMap] = unique(kClasses);
-       [M, ~, C] = mode(valueMap);
+        if size(C{1},1) > 1
+            %more than one modal value, choose the nearest neighbor of
+            %modal values
+            for j = 1 : K
+               if ismember(valueMap(j),C{1})
+                   M = valueMap(j);
+                   break;
+               end
+            end
+        end
+
+        SAMPLECLASSES(i) = uniqueValues(M);
        
-       if size(C{1},1) > 1
-           for j = 1 : K
-              if ismember(valueMap(j),C{1})
-                  M = valueMap(j);
-                  break;
-              end
-           end
-       end
-       
-       SAMPLECLASSES(i) = uniqueValues(M);
-       
-    end
+     end
 end
