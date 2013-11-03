@@ -50,3 +50,4 @@ knnC = knn(TRAIN, TRAIN, TRAINCLASSES, 5, true);
 showScatter(TRAIN, knnC, fields{ix1}, fields{ix2});
 title('Classified by our K-NN. K = 5');
 
+testKNN(TRAIN,TRAINCLASSES);
