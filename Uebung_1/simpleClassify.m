@@ -24,8 +24,8 @@ function [properties, classified] = simpleClassify(sampleData, numberOfClasses)
     % Iterate over each row in sampleData
     for j = 1 : size(sampleData, 1)
         % Extract features of interest
-        prop1(j) = sampleData{j}.formfactor;
-        prop2(j) = sampleData{j}.roundness;
+        prop1(j) = sampleData(j,1);
+        prop2(j) = sampleData(j,2);
 
         % Classify 
         if and(prop1(j) > 0.4, prop2(j) > 0.8)
