@@ -37,7 +37,7 @@ function [properties, classified] = simpleClassify(sampleData, numberOfClasses)
         elseif and(prop1(j) > 0.2, prop2(j) > 0.05)
             classified{j} = 'Watch';
         else
-            classified{j} = 'fork';
+            classified{j} = 'Fork';
         end
 
     end
