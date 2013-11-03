@@ -35,7 +35,7 @@ figure();
 % Display raw, unclassified data
 subplot(1, 3, 1);
 showScatter(TRAIN, TRAINCLASSES, fields{ix1}, fields{ix2});
-title('Unclassified data');
+title('Training data');
 
 % Display classified data by hardcoded thresholds.
 subplot(1, 3, 2);
