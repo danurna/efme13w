@@ -24,20 +24,20 @@ function classified = simpleClassify(sampleData, numberOfClasses)
     % Iterate over each row in sampleData
     for j = 1 : size(sampleData, 1)
         % Extract features of interest
-        prop1(j) = sampleData(j,1);
-        prop2(j) = sampleData(j,2);
+        prop1(j) = sampleData(j,1); %formfactor
+        prop2(j) = sampleData(j,2); %roundness
 
         % Classify 
         if and(prop1(j) > 0.4, prop2(j) > 0.8)
-            classified{j} = 'Apple';
+            classified{j} = 'apple';
         elseif and(prop1(j) > 0.3, prop2(j) > 0.45)
-            classified{j} = 'Fountain';
+            classified{j} = 'fountain';
         elseif and(prop1(j) > 0.4, prop2(j) > 0.25)
-            classified{j} = 'Brick';
+            classified{j} = 'brick';
         elseif and(prop1(j) > 0.2, prop2(j) > 0.05)
-            classified{j} = 'Watch';
+            classified{j} = 'watch';
         else
-            classified{j} = 'Fork';
+            classified{j} = 'fork';
         end
 
     end
