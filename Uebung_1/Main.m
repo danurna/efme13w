@@ -4,7 +4,7 @@ filenames = { 'watch', 'brick', 'fork', 'fountain', 'apple' };
 dataStruct = readImagesAndCalculateProps(filenames);
 fields = {'formfactor', 'roundness', 'aspectratio', 'Solidity', 'compactness' };
 
-figure();
+figure(1);
 % Maximize the figure window.
 set(gcf, 'Position', get(0, 'ScreenSize'));
 suptitle('Data Exploration - Finding the right features!');
@@ -31,7 +31,8 @@ ix2 = 2;
 numberOfClasses = size(filenames, 2);
 
 
-figure();
+figure(2);
+set(gcf, 'Position', get(0, 'ScreenSize'));
 % Display raw, unclassified data
 subplot(1, 3, 1);
 showScatter(TRAIN, TRAINCLASSES, fields{ix1}, fields{ix2});
