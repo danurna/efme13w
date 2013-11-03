@@ -40,7 +40,7 @@ function [SAMPLECLASSES] = knn(SAMPLE, TRAIN, TRAINCLASSES, K, LOOCV)
                 end
             end
         otherwise
-            error('knn expects at least 3 input arguments');
+            error('knn expects 3 to 5 input arguments');
     end
     
     trainSize = size(TRAIN,1);
