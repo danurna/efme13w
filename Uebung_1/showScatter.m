@@ -15,9 +15,7 @@ function showScatter(dataStruct, classNames, prop1, prop2)
         
     end
 
-    figure;
     gscatter(c(:,1), c(:,2), classifiers, 'mcbry', 'o');
-    legend('Location','SouthEastOutside');
     xlabel(prop1);
     ylabel(prop2);
 end
