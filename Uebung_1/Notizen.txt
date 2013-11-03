@@ -16,3 +16,6 @@ Welche Merkmale sollen nicht verwendet werden?
 - Perimeter (nicht Skalierungsinvariant)
 - Fläche (nicht Skalierungsinvariant)
 - Centroid (nicht Rotationsinvariant)
+- Area (nicht Skalierungsinvariant)
+- FilledArea (nicht Skalierungsinvariant)
+- Orientation (nicht Rotationinvariant)

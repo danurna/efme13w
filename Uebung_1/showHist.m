@@ -4,10 +4,9 @@ function showHist(dataStruct, dataName, propName)
     c = ones(20, dataSize);
 
     for j = 1 : dataSize
-        c(:, j) = getFeatureVector( dataStruct.(dataName{j}), propName) ;
+        c(:, j) = getFeatureVector( dataStruct.(dataName{j}), propName);
     end
 
     hist(c);
-    c
     legend(dataName);
 end
