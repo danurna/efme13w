@@ -1,5 +1,9 @@
 function tryAndPlotEveryK(TRAIN, TRAINCLASSES)
 
+%Checking effectiveness of each k
+disp('#####################################');
+fprintf('%s\n\n','Checking effectiveness of each k');
+
 elements = numel(TRAINCLASSES);
 
 effective = zeros(1,elements-1);
@@ -15,6 +19,9 @@ for k = 1:elements-1
 end
 
 plot(100*effective, 'b-o');
-ylabel('Effectivness in %'); xlabel('k');
+title('Effectivness of different k''s');
+
+xlabel('k');
+ylabel('Effectivness in %');
 
 end

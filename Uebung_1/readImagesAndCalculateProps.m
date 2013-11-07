@@ -12,6 +12,7 @@ warning off MATLAB:warn_r14_stucture_assignment
         end
         fprintf('%s\n','done');
     end
+    fprintf('\n\n%s','');
 warning on MATLAB:warn_r14_stucture_assignment
     
 end

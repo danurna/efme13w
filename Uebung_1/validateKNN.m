@@ -13,6 +13,7 @@ ourTime = 0;
 diff = zeros(1,numel(k));
 
 disp('#####################################');
+disp('Validating KNN by comparing to Matlab');
 for i = 1 : numel(k);
     fprintf('k = %3d',k(i));
     for j = 1:elements
@@ -34,7 +35,7 @@ for i = 1 : numel(k);
     fprintf('%30s\n','done');
     
 end
-disp('#####################################');
+
 fprintf('\nDifference between Matlab and ours: %d\n', sum(diff));
 
 fprintf('Our time: %.3fs\n',ourTime);

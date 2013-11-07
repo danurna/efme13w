@@ -68,7 +68,7 @@ SAMPLECLASSES = repmat(SAMPLECLASSES,testSize,1);
 dist = pdist2(SAMPLE,TRAIN);
 
 %(asc) sort each row from the distances from the to each train vector
-[sorted, minIndexMatrix] = sort(dist, 2);
+[~, minIndexMatrix] = sort(dist, 2);
 
 %if LOOCV, skip first.
 kClasses = TRAINCLASSES(minIndexMatrix(:, 1+LOOCV : K+LOOCV));
