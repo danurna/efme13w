@@ -6,7 +6,7 @@ function showScatter(DATA, DATACLASSES, labelx, labely)
     [sortedClasses ix] = sort(DATACLASSES);
     dataByClasses = DATA(ix,:);
 
-    gscatter(dataByClasses(:,1),dataByClasses(:,2),sortedClasses, 'mcbrg');
+    gscatter(dataByClasses(:,1),dataByClasses(:,2),sortedClasses, 'mcbrgky');
     legend('Location','NorthWest');
     xlabel(labelx);
     ylabel(labely);
