@@ -60,50 +60,53 @@ if K > trainSize-1
     K = trainSize-1;
 end
 
-SAMPLECLASSES = TRAINCLASSES(1:testSize);
-kClasses = TRAINCLASSES(1:K);
+SAMPLECLASSES = TRAINCLASSES(1);
+SAMPLECLASSES = repmat(SAMPLECLASSES,testSize,1);
 
 %Pairwise euclidean distance between SAMPLE and TRAIN
 %dist(i,j) is the distance between SAMPLE(i) and TRAIN(j)
 dist = pdist2(SAMPLE,TRAIN);
 
+%(asc) sort each row from the distances from the to each train vector
+[sorted, minIndexMatrix] = sort(dist, 2);
+
+%if LOOCV, skip first.
+kClasses = TRAINCLASSES(minIndexMatrix(:, 1+LOOCV : K+LOOCV));
+
+
+%uniqueValues is selfexplanatory, indexMap is basically a numerical
+%representation of kClasses.
+%example:
+%   when:
+%       kClasses =
+%           'a' 'b' 'a'
+%           'a' 'b' 'a'
+%   then:
+%       uniqueValues = 
+%           'a'
+%           'b'
+%       indexMap = 
+%           1   2   1
+%           1   2   1
+
+[uniqueValues, ~, indexMap] = unique(kClasses);
+indexMap = reshape(indexMap, testSize, K);
+
+[Modal, ~, Tie] = mode(indexMap,2);
+
 for i = 1 : testSize
-    %(asc) sort the distances from the sample i to each train vector
-    [~, minIndex] = sort(dist(i,:));
-    
-    for j = 1 : K
-        %collect classes for k nearest neighbors
-        ix = j;
-        
-        if LOOCV
-            %when doing LOOCV, distance 0 (same vector) is neglected
-            ix = j+1;
-        end
-        kClasses(j) = TRAINCLASSES(minIndex(ix));
-    end
-    
-    %uniqueValues is selfexplanatory, valueMap is basically a numerical
-    %representation of kClasses.
-    %example:
-    %   when: kClasses = {'a','b','a'}
-    %   then: uniqueValues = {'a','b'}
-    %         valueMap = [1,2,1];
-    [uniqueValues, ~, valueMap] = unique(kClasses);
-    [M, ~, C] = mode(valueMap);
-    
-    if size(C{1},1) > 1
-        %more than one modal value, choose the nearest neighbor of
-        %modal values
+    if size(Tie{i,1},1) > 1
+        %more than one modal value, break tie by choosing the nearest
+        %of possible neighbor values
         for j = 1 : K
-            if ismember(valueMap(j),C{1})
-                M = valueMap(j);
+            if ismember(indexMap(i,j),Tie{i,1})
+                Modal(i) = indexMap(i,j);
                 break;
             end
         end
     end
     
-    SAMPLECLASSES(i) = uniqueValues(M);
-    
+    SAMPLECLASSES(i) = uniqueValues(Modal(i));
 end
 
 
