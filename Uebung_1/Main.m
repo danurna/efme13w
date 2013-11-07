@@ -1,6 +1,21 @@
-clear; 
+try
+    close(1);
+catch e
+end
+
+try
+    close(2);
+catch e
+end
+
+try
+    close(3);
+catch e
+end
+
+clear;
 % Define and read data.
-filenames = { 'watch', 'brick', 'fork', 'fountain', 'apple' };
+filenames = { 'watch', 'brick', 'fork', 'fountain', 'apple'};
 dataStruct = readImagesAndCalculateProps(filenames);
 fields = {'formfactor', 'roundness', 'aspectratio', 'Solidity', 'compactness' };
 
@@ -12,14 +27,14 @@ suptitle('Data Exploration - Finding the right features!');
 % Draw scatter plots of all combinations of our fields.
 p = 0;
 for i = 1:numel(fields)-1
-  for j = i+1:numel(fields)
-      p = p + 1;
-      subplot(3, 4, p);
-      [TRAIN TRAINCLASSES] = getTrainingSet(dataStruct, filenames, fields{i}, fields{j});
-      showScatter(TRAIN, TRAINCLASSES, fields{i}, fields{j});
-      hLeg = legend('~');
-      set(hLeg,'visible','off');
-  end 
+    for j = i+1:numel(fields)
+        p = p + 1;
+        subplot(3, 4, p);
+        [TRAIN TRAINCLASSES] = getTrainingSet(dataStruct, filenames, fields{i}, fields{j});
+        showScatter(TRAIN, TRAINCLASSES, fields{i}, fields{j});
+        hLeg = legend('~');
+        set(hLeg,'visible','off');
+    end
 end
 
 %Choose best indices of best features (formfactor, and roundness)
@@ -50,4 +65,10 @@ knnC = knn(TRAIN, TRAIN, TRAINCLASSES, 5, true);
 showScatter(TRAIN, knnC, fields{ix1}, fields{ix2});
 title('Classified by our K-NN. K = 5');
 
-testKNN(TRAIN,TRAINCLASSES);
+validateKNN(TRAIN,TRAINCLASSES);
+
+figure(3);
+set(gcf, 'Position', get(0, 'ScreenSize'));
+tryAndPlotEveryK(TRAIN, TRAINCLASSES);
+
+fprintf('\n\n%s\n', 'ALL DONE!');
