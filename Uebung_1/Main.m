@@ -14,27 +14,38 @@ catch e
 end
 
 clear;
+% filenames = {'apple', 'bat', 'beetle', 'bell', 'bird', 'Bone', 'bottle', ...
+% 'brick', 'butterfly', 'camel', 'car', 'carriage', 'cattle', 'cellular', ...
+% 'chicken', 'children', 'chopper', 'classic', 'Comma', 'crown', 'cup', ...
+% 'deer', 'device0', 'device1', 'device2', 'device3', 'device4','device5', ...
+% 'device6', 'device7', 'device8', 'device9', 'dog', 'elephant', 'face', ...
+% 'fish', 'flatfish', 'fly', 'fork', 'fountain', 'frog', 'Glas', 'guitar', ...
+% 'hammer', 'hat', 'HCircle', 'Heart', 'horse', 'horseshoe', 'jar', 'key', ...
+% 'lizzard', 'lmfish', 'Misk', 'octopus', 'pencil', 'pocket', ...
+% 'rat', 'ray', 'sea_snake', 'shoe', 'spoon', 'spring', 'stef', 'teddy', ...
+% 'tree', 'truck', 'turtle', 'watch'};
+
 % Define and read data.
 filenames = { 'watch', 'brick', 'fork', 'fountain', 'apple'};
 dataStruct = readImagesAndCalculateProps(filenames);
-fields = {'formfactor', 'roundness', 'aspectratio', 'Solidity', 'compactness' };
+fields = {'formfactor', 'roundness', 'aspectratio', 'Solidity' };
 
 figure(1);
 % Maximize the figure window.
 set(gcf, 'Position', get(0, 'ScreenSize'));
 suptitle('Data Exploration - Finding the right features!');
 
+combinations = nchoosek(fields,2);
+
 % Draw scatter plots of all combinations of our fields.
 p = 0;
-for i = 1:numel(fields)-1
-    for j = i+1:numel(fields)
-        p = p + 1;
-        subplot(3, 4, p);
-        [TRAIN TRAINCLASSES] = getTrainingSet(dataStruct, filenames, fields{i}, fields{j});
-        showScatter(TRAIN, TRAINCLASSES, fields{i}, fields{j});
-        hLeg = legend('~');
-        set(hLeg,'visible','off');
-    end
+
+for i = 1:size(combinations,1)
+   subplot(2,3,i);
+   [TRAIN, TRAINCLASSES] = getTrainingSet(dataStruct, filenames, combinations{i,1}, combinations{i,2});
+   showScatter(TRAIN, TRAINCLASSES, combinations{i,1}, combinations{i,2});
+   hLeg = legend('~');
+   set(hLeg, 'visible', 'off');
 end
 
 %Choose best indices of best features (formfactor, and roundness)
