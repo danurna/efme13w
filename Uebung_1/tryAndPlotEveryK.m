@@ -7,6 +7,7 @@ fprintf('%s\n\n','Checking effectiveness of each k');
 elements = numel(TRAINCLASSES);
 
 effective = zeros(1,elements-1);
+tic;
 for k = 1:elements-1
     
     fprintf('k = %2d',k);
@@ -17,6 +18,7 @@ for k = 1:elements-1
     effective(k) = 1-(difference);
     
 end
+toc;
 
 plot(100*effective, 'b-o');
 title('Effectivness of different k''s');
