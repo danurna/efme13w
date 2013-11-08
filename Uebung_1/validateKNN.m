@@ -1,6 +1,6 @@
 function validateKNN(TRAIN, TRAINCLASSES)
 
-k = [1,2,5,10,15,25,35,50,70,99, 110, 119];
+k = [1,2,5,10,15,25,35,50,70,99];
 elements = numel(TRAINCLASSES);
 
 k = k(k < elements);
@@ -16,8 +16,10 @@ disp('#####################################');
 disp('Validating KNN by comparing to Matlab');
 for i = 1 : numel(k);
     fprintf('k = %3d',k(i));
+    
+    %Matlab doesn't have LOOCV flag, we need to do it in a for loop
     for j = 1:elements
-        ix = [1:j-1,j+1:elements];
+        ix = [1:j-1,j+1:elements]; %all indices except j
         
         tic;
         matC(j) = knnclassify(TRAIN(j,:),TRAIN(ix,:),TRAINCLASSES(ix),k(i));
@@ -29,7 +31,7 @@ for i = 1 : numel(k);
     ourC = knn(TRAIN,TRAIN,TRAINCLASSES,k(i),true);
     ourTime = ourTime + toc;
     
-    diffMatlab = nnz(~strcmp(matC,ourC));
+    diffMatlab = nnz(~strcmp(matC,ourC)); %count number of different classifications
     diff(i) = diffMatlab;
     
     fprintf('%30s\n','done');

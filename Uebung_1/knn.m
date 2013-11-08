@@ -82,10 +82,10 @@ kClasses = TRAINCLASSES(minIndexMatrix(:, 1+LOOCV : K+LOOCV));
 %           'a' 'b' 'a'
 %           'a' 'b' 'a'
 %   then:
-%       uniqueValues = 
+%       uniqueValues =
 %           'a'
 %           'b'
-%       indexMap = 
+%       indexMap =
 %           1   2   1
 %           1   2   1
 
@@ -94,16 +94,18 @@ indexMap = reshape(indexMap, testSize, K);
 
 [Modal, ~, Tie] = mode(indexMap,2);
 
+
+
 for i = 1 : testSize
-    if size(Tie{i,1},1) > 1
+    TieSize = size(Tie{i,1},1);
+    if TieSize > 1
         %more than one modal value, break tie by choosing the nearest
         %of possible neighbor values
-        for j = 1 : K
-            if ismember(indexMap(i,j),Tie{i,1})
-                Modal(i) = indexMap(i,j);
-                break;
-            end
+        firstIx = -1*ones(TieSize,1);
+        for j = 1:TieSize
+            firstIx(j) = find(indexMap(i,:)==Tie{i,1}(j),1);
         end
+        Modal(i) = indexMap(i,min(firstIx)); 
     end
     
     SAMPLECLASSES(i) = uniqueValues(Modal(i));
