@@ -1,29 +1,4 @@
-try
-    close(1);
-catch e
-end
-
-try
-    close(2);
-catch e
-end
-
-try
-    close(3);
-catch e
-end
-
 clear;
-% filenames = {'apple', 'bat', 'beetle', 'bell', 'bird', 'Bone', 'bottle', ...
-% 'brick', 'butterfly', 'camel', 'car', 'carriage', 'cattle', 'cellular', ...
-% 'chicken', 'children', 'chopper', 'classic', 'Comma', 'crown', 'cup', ...
-% 'deer', 'device0', 'device1', 'device2', 'device3', 'device4','device5', ...
-% 'device6', 'device7', 'device8', 'device9', 'dog', 'elephant', 'face', ...
-% 'fish', 'flatfish', 'fly', 'fork', 'fountain', 'frog', 'Glas', 'guitar', ...
-% 'hammer', 'hat', 'HCircle', 'Heart', 'horse', 'horseshoe', 'jar', 'key', ...
-% 'lizzard', 'lmfish', 'Misk', 'octopus', 'pencil', 'pocket', ...
-% 'rat', 'ray', 'sea_snake', 'shoe', 'spoon', 'spring', 'stef', 'teddy', ...
-% 'tree', 'truck', 'turtle', 'watch'};
 
 % Define and read data.
 filenames = { 'watch', 'brick', 'fork', 'fountain', 'apple'};
@@ -35,7 +10,7 @@ figure(1);
 set(gcf, 'Position', get(0, 'ScreenSize'));
 suptitle('Data Exploration - Finding the right features!');
 
-combinations = nchoosek(fields,2);
+combinations = nchoosek(fields, 2);
 
 % Draw scatter plots of all combinations of our fields.
 p = 0;
@@ -55,7 +30,6 @@ ix2 = 2;
 % Make training Set out of chosen features
 [TRAIN TRAINCLASSES] = getTrainingSet(dataStruct, filenames, fields{ix1}, fields{ix2});
 numberOfClasses = size(filenames, 2);
-
 
 figure(2);
 set(gcf, 'Position', get(0, 'ScreenSize'));
