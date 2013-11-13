@@ -91,24 +91,26 @@ kClasses = TRAINCLASSES(minIndexMatrix(:, 1+LOOCV : K+LOOCV));
 
 [uniqueValues, ~, indexMap] = unique(kClasses);
 indexMap = reshape(indexMap, testSize, K);
-
-[Modal, ~, Tie] = mode(indexMap,2);
-
-
+% tic
+% for i = 1 : testSize
+% [FastModal] = fastmode(indexMap(i,:));
+% end
+% toc;
 
 for i = 1 : testSize
-    TieSize = size(Tie{i,1},1);
+    Modal = fastmode(indexMap(i,:));
+    TieSize = size(Modal,1);
     if TieSize > 1
         %more than one modal value, break tie by choosing the nearest
         %of possible neighbor values
         firstIx = -1*ones(TieSize,1);
         for j = 1:TieSize
-            firstIx(j) = find(indexMap(i,:)==Tie{i,1}(j),1);
+            firstIx(j) = find(indexMap(i,:)==Modal(j),1);
         end
-        Modal(i) = indexMap(i,min(firstIx)); 
+        Modal = indexMap(i,min(firstIx)); 
     end
     
-    SAMPLECLASSES(i) = uniqueValues(Modal(i));
+    SAMPLECLASSES(i) = uniqueValues(Modal);
 end
 
 
