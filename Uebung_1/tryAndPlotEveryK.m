@@ -12,10 +12,12 @@ for k = 1:elements-1
     
     fprintf('k = %2d',k);
     knnCLASSES = knn(TRAIN,TRAIN,TRAINCLASSES,k,true);
-    fprintf('\t%s\n','done');
     
     difference = nnz(~strcmp(TRAINCLASSES,knnCLASSES))/elements;
     effective(k) = 1-(difference);
+    
+    fprintf('\t%s / %3.0f%% Correctly classified\n','done', 100*effective(k));
+    
     
 end
 toc;
