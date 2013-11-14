@@ -1,4 +1,4 @@
-function [SAMPLECLASSES] = knn(SAMPLE, TRAIN, TRAINCLASSES, K, LOOCV)
+function [SAMPLECLASSES, DIST, EFFECTIVENESS] = knn(SAMPLE, TRAIN, TRAINCLASSES, K, LOOCV, DIST)
 %KNN - Classify sample data based on k nearest neighbors in a given training set
 %
 %  Detailed
@@ -39,8 +39,10 @@ switch nargin
                 error('LOOCV flag must be a logical value');
             end
         end
+    case 6
+        
     otherwise
-        error('knn expects 3 to 5 input arguments');
+        error('knn expects 3 to 6 input arguments');
 end
 
 trainSize = size(TRAIN,1);
@@ -63,12 +65,25 @@ end
 SAMPLECLASSES = TRAINCLASSES(1);
 SAMPLECLASSES = repmat(SAMPLECLASSES,testSize,1);
 
+doEffectiveness = false;
+if nargout>=3
+    if isequal(TRAIN, SAMPLE)
+        doEffectiveness = true;
+    else
+        fprintf('%s\n','Can only calculate effectiveness if TRAIN and SAMPLE are equal');
+    end
+end
+
+
 %Pairwise euclidean distance between SAMPLE and TRAIN
 %dist(i,j) is the distance between SAMPLE(i) and TRAIN(j)
-dist = pdist2(SAMPLE,TRAIN);
+if ~exist('dist','var') || isempty(DIST)
+    DIST = pdist2(SAMPLE,TRAIN);
+end
+
 
 %(asc) sort each row from the distances from the to each train vector
-[~, minIndexMatrix] = sort(dist, 2);
+[~, minIndexMatrix] = sort(DIST, 2);
 
 %if LOOCV, skip first.
 kClasses = TRAINCLASSES(minIndexMatrix(:, 1+LOOCV : K+LOOCV));
@@ -107,11 +122,19 @@ for i = 1 : testSize
         for j = 1:TieSize
             firstIx(j) = find(indexMap(i,:)==Modal(j),1);
         end
-        Modal = indexMap(i,min(firstIx)); 
+        Modal = indexMap(i,min(firstIx));
     end
     
     SAMPLECLASSES(i) = uniqueValues(Modal);
 end
 
+if doEffectiveness
+    if isnumeric(SAMPLECLASSES(1))
+        misClassified = nnz(~(SAMPLECLASSES == TRAINCLASSES));
+    else
+        misClassified = nnz(~strcmp(SAMPLECLASSES , TRAINCLASSES));
+    end
+    EFFECTIVENESS = 1-(misClassified/testSize);
+end
 
 end
