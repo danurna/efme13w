@@ -11,12 +11,22 @@ tic;
 for k = 1:elements-1
     
     fprintf('k = %2d',k);
-    knnCLASSES = knn(TRAIN,TRAIN,TRAINCLASSES,k,true);
+    if k == 1
+       [knnCLASSES dist] = knn(TRAIN,TRAIN,TRAINCLASSES,k,true);
+    else
+       knnCLASSES = knn(TRAIN,TRAIN,TRAINCLASSES,k,true, dist); 
+    end
     
-    difference = nnz(~strcmp(TRAINCLASSES,knnCLASSES))/elements;
+    
+    if isnumeric(knnCLASSES(1))
+        absolutDiff = nnz(~(TRAINCLASSES == knnCLASSES));
+    else
+        absolutDiff = nnz(~strcmp(TRAINCLASSES,knnCLASSES));
+    end
+    difference = absolutDiff/elements;
     effective(k) = 1-(difference);
     
-    fprintf('\t%s / %3.0f%% Correctly classified\n','done', 100*effective(k));
+    fprintf('\t%s / %3.2f%% Correctly classified\n','done', 100*effective(k));
     
     
 end
