@@ -2,12 +2,12 @@ clear;
 
 [TRAIN, TRAINCLASSES] = importTrainingSet('wine.data');
 [TR1, TRC1, TS1, TSC1] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.75, 1);
-[TR2, TRC2, TS2, TSC2] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.90, 2);
-[TR3, TRC3, TS3, TSC3] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.60, 3);
+[TR2, TRC2, TS2, TSC2] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.75, 20);
+[TR3, TRC3, TS3, TSC3] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.75, 3);
 
-mahal1 = mahalClassify(TS1, TR1, TRC1);
-mahal2 = mahalClassify(TS2, TR2, TRC2);
-mahal3 = mahalClassify(TS3, TR3, TRC3);
+mahal1 = mahalClassify(TS1, TR1, TRC1, false);
+mahal2 = mahalClassify(TS2, TR2, TRC2, false);
+mahal3 = mahalClassify(TS3, TR3, TRC3, false);
 
 knn1 = knn(TS1,TR1,TRC1,1,false);
 knn2 = knn(TS2,TR2,TRC2,1,false);
