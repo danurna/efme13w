@@ -1,7 +1,7 @@
 function TESTCLASS = mahalClassify(TEST, TRAIN, TRAINCLASSES, EQUALCOV)
 
 if ~exist('EQUALCOV', 'var')
-    EQUALCOV = 1;
+    EQUALCOV = true;
 end
 
 if nargin < 3
