@@ -73,7 +73,7 @@ if EQUALCOV
     end
     COV = COV / numOfCOVs;
     
-    INVC(1:3) = {COV};
+    INVC(1:3) = {diag(diag(inv(COV)))};
     
 else
     for i = 1 : numOfCOVs
