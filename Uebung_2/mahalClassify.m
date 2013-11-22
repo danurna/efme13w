@@ -4,12 +4,17 @@ if ~exist('EQUALCOV', 'var')
     EQUALCOV = 1;
 end
 
-if nargin ~= 3
-    error('%s\n\t%s\n\t%s\n\t%s', ...
+if nargin < 3
+    error('%s\n\t%s\n\t%s\n\t%s\n\t%s', ...
         'mahalClassify expects at least 3 input Arguments:', ...
         '- A TEST Matrix', ...
         '- A TRAIN Matrix', ...
-        '- A TRAINCLASSES Vector with Classes for each row in TRAIN');
+        '- A TRAINCLASSES Vector with Classes for each row in TRAIN', ...
+        '- An optional boolean (default = true), which indicates if all Classes should have the same Covariance Matrix');
+end
+
+if ~islogical(EQUALCOV)
+    error('EQUALCOV must be a logical value');
 end
 
 if ~isvector(TRAINCLASSES)

@@ -14,8 +14,8 @@ function [TRAINING, TRAININGCLASSES, TEST, TESTCLASSES] = splitDataIntoTestAndTr
     % to the output
     for i = 1:nClasses 
         classDataSet = Dataset(Dataclasses == classes(i),:);
-        nRows = size(classDataSet, 1) % number of rows
-        nSample = floor(Trainingsfactor*nRows) % number of samples
+        nRows = size(classDataSet, 1); % number of rows
+        nSample = floor(Trainingsfactor*nRows); % number of samples
         s = RandStream('mt19937ar','Seed', Seed);
         rndIDX = randperm(s, nRows);
         %TRAINING
