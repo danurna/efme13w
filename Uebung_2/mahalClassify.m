@@ -12,7 +12,7 @@ if nargin < 3
         '- A TEST Matrix', ...
         '- A TRAIN Matrix', ...
         '- A TRAINCLASSES Vector with Classes for each row in TRAIN', ...
-        '- An optional boolean (default = true), which indicates if all ', ... 
+        '- An optional boolean (default = true), which indicates if all ', ...
         'Classes should have the same Covariance Matrix');
 end
 
@@ -31,16 +31,15 @@ end
 uniqueClasses = unique(TRAINCLASSES);
 numOfClasses = numel(uniqueClasses);
 
-MEANS = cell(numOfClasses,1);
-COVs = cell(numOfClasses,1);
+
+Classes = cell(numOfClasses,1);
 
 
 for i = 1 : numOfClasses
-    classI = TRAIN(TRAINCLASSES == uniqueClasses(i),:);
-    COVs{i} = cov(classI);
-    MEANS{i} = mean(classI);
+    Classes{i} = TRAIN(TRAINCLASSES == uniqueClasses(i),:);
 end
-INVC = computeInverse(COVs,EQUALCOV);
+
+[INVC MEANS] = computeInverse(Classes,EQUALCOV);
 
 numOfTestValues = size(TEST, 1);
 
@@ -62,25 +61,33 @@ end
 
 end
 
-function INVC = computeInverse(COVs, EQUALCOV)
+function [INVC MEANS] = computeInverse(Classes, EQUALCOV)
 
-INVC = COVs;
+numOfClasses = size(Classes,1);
+MEANS = cell(numOfClasses,1);
+INVC = cell(numOfClasses,1);
+COV = zeros(size(Classes{1},2));
+N = 0;
 
-numOfCOVs = size(COVs,1);
+for i = 1 : numOfClasses
+    currentClass = Classes{i};
+    currentMean = mean(currentClass);
+    MEANS{i} = currentMean;
+    N = N + size(currentClass,1);
+    
+    if EQUALCOV
+        for j = 1 : size(currentClass,1)
+            diff = (currentClass(j,:) - currentMean);
+            COV = COV + diff' * diff;
+        end
+    else
+        INVC{i} = inv(cov(currentClass));
+    end
+    
+end
 
 if EQUALCOV
-    
-    COV = zeros(size(COVs{1}));
-    for i = 1 : numOfCOVs
-        COV = COV + COVs{i};
-    end
-    COV = COV / numOfCOVs;
-    
+    COV = COV ./ (N-1);
     INVC(1:3) = {diag(diag(inv(COV)))};
-    
-else
-    for i = 1 : numOfCOVs
-        INVC{i} = inv(COVs{i});
-    end
 end
 end
