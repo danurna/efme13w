@@ -1,6 +1,23 @@
 clear;
 
 [TRAIN, TRAINCLASSES] = importTrainingSet('wine.data');
+
+for a = 1:13
+    correlation = corrcoef(TRAIN);
+    sort = zeros(13,1);
+    sort(1)=a;
+    total = 1:13;
+    for i = 2 : 13
+        correlation(:,sort(i-1)) = -Inf;
+        [~, ix] = max(correlation(sort(i-1),:));
+        sort(i) = ix;
+    end
+    figure(a);
+    parallelcoords(TRAIN(:,sort),'Group',TRAINCLASSES);
+    sort'
+end
+
+
 [TR1, TRC1, TS1, TSC1] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.75, 1);
 [TR2, TRC2, TS2, TSC2] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.75, 20);
 [TR3, TRC3, TS3, TSC3] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, 0.75, 3);
@@ -24,14 +41,14 @@ fprintf('\tTest Set 3 (%d Elements in Total) Mahal: %d KNN: %d\n',size(TS3, 1), 
 % bestK = 0;
 % mostEffective = 0;
 % bestColumns = 1;
-% 
+%
 % for i = 1:13
-%     
+%
 %     chosenColumns = nchoosek(featureColumns,i);
 %     possibilities = size(chosenColumns,1);
-%     
+%
 %     fprintf('Choose %d of 13 features (%d possibilities)\n',i,possibilities);
-%     
+%
 %     for j = 1:possibilities
 %         fprintf('Possibility %d of %d\n', j,possibilities);
 %         [k effectiveness] = evaluateMostEffectiveK(TRAIN(:,chosenColumns(j,:)), TRAINCLASSES);
@@ -44,9 +61,9 @@ fprintf('\tTest Set 3 (%d Elements in Total) Mahal: %d KNN: %d\n',size(TS3, 1), 
 %             clc
 %         end;
 %     end
-%     
+%
 % end
-% 
+%
 % disp(bestColumns);
 % disp(bestK);
 % disp(mostEffective);
@@ -63,9 +80,9 @@ mahal = zeros(size(TRAINCLASSES));
 matlabmahal = zeros(size(TRAINCLASSES));
 
 for j = 1:elements
-        ix = [1:j-1,j+1:elements]; %all indices except j
-        mahal(j) = mahalClassify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix));
-        matlabmahal(j) = classify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix),'mahalanobis');
+    ix = [1:j-1,j+1:elements]; %all indices except j
+    mahal(j) = mahalClassify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix));
+    matlabmahal(j) = classify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix),'mahalanobis');
 end
 
 fprintf('\tLOOCV (%d Elements in Total) Mahal: %d KNN: %d\n', size(TRAIN, 1), nnz(~(mahal == TRAINCLASSES)), nnz(~(SAMPLECLASSES == TRAINCLASSES)));
