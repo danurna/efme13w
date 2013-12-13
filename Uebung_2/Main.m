@@ -34,7 +34,7 @@ for i = 1 : numOfSets
                 nnz(~(knnResult == TESTSETS{i}.class))); 
 end
 
-[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1);
+[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,[1:10]);
 %bestColumns = [1,7,10,11,13];
 %bestK = 34;
 
