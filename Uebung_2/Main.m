@@ -3,10 +3,10 @@ clear;
 [TRAIN, TRAINCLASSES] = importTrainingSet('wine.data');
 
 %Split original Data into Train and Test Sets
-TRAINSETS = cell(1);
-TESTSETS = cell(1);
-BESTFEATURESPERSET = cell(1);
-GLOBALBESTFEATURES = cell(1);
+trainSets = cell(1);
+testSets = cell(1);
+bestFeaturesPerSet = cell(1);
+globalBestFeatures = cell(1);
 
 trainFactors = [0.9 0.7 0.5];
 numOfSets = numel(trainFactors);
@@ -17,19 +17,19 @@ for i = 1:numOfSets
     
     trainStruct.data = TR;
     trainStruct.class = TRC;
-    TRAINSETS{i} = trainStruct;
+    trainSets{i} = trainStruct;
     
     testStruct.data = TS;
     testStruct.class = TSC;
-    TESTSETS{i} = testStruct;
+    testSets{i} = testStruct;
     
-    BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
+    bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
     %BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
     
     if i ~= 1
-        GLOBALBESTFEATURES = intersect(GLOBALBESTFEATURES,BESTFEATURESPERSET{i}(:,4));
+        globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
     else
-        GLOBALBESTFEATURES = BESTFEATURESPERSET{i}(:,4);
+        globalBestFeatures = bestFeaturesPerSet{i}(:,4);
     end
     
 end
@@ -38,21 +38,21 @@ end
 %correctly. => find shortest string in cell array
 %Source: http://www.mathworks.com/matlabcentral/answers/63551
 
-val = cellfun(@(x) numel(x),GLOBALBESTFEATURES);
-out = GLOBALBESTFEATURES(val==min(val));
+val = cellfun(@(x) numel(x),globalBestFeatures);
+out = globalBestFeatures(val==min(val));
 bestColumns = str2num(out{1}); %#ok<ST2NM>
 
 
 disp('# of missclassified Elements');
 for i = 1 : numOfSets
-    mahalResult = mahalClassify(TESTSETS{i}.data(:,bestColumns), TRAINSETS{i}.data(:,bestColumns), TRAINSETS{i}.class, true);
-    knnResult = knn(TESTSETS{i}.data(:,bestColumns), TRAINSETS{i}.data(:,bestColumns), TRAINSETS{i}.class, 1);
+    mahalResult = mahalClassify(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, true);
+    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, 1);
     
     fprintf('\tTest Set %d (%d Elements in Total) Mahal: %d KNN: %d\n',...
                 i, ...
-                size(TESTSETS{i}.data, 1), ...
-                nnz(~(mahalResult == TESTSETS{i}.class)), ...
-                nnz(~(knnResult == TESTSETS{i}.class))); 
+                size(testSets{i}.data, 1), ...
+                nnz(~(mahalResult == testSets{i}.class)), ...
+                nnz(~(knnResult == testSets{i}.class))); 
 end
 
 %[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1:10);

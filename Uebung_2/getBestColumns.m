@@ -50,7 +50,7 @@ for i = 1:colNum
                 TRAINCLASSES, kInterval);
         end
         
-        if effectiveness >= 0.95
+        if effectiveness >= 0.95 %empirisch
             if effectiveness > mostEffective
                 mostEffective = effectiveness;
             end
