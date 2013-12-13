@@ -1,4 +1,4 @@
-function [bestK effectiveness] = evaluateMostEffectiveK(TRAIN, TRAINCLASSES)
+function [bestK effectiveness] = evaluateMostEffectiveK(TRAIN, TRAINCLASSES, highestK)
 
 elements = numel(TRAINCLASSES);
 
@@ -7,7 +7,7 @@ bestK = 0;
 
 effective = zeros(1,elements-1);
 tic;
-for k = 1:100
+for k = 1:highestK
     
     if k == 1
        [knnCLASSES dist] = knn(TRAIN,TRAIN,TRAINCLASSES,k,true);
