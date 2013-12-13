@@ -1,37 +1,37 @@
-function [bestK effectiveness] = evaluateMostEffectiveK(TRAIN, TRAINCLASSES, highestK)
+function [bestK effectiveness] = evaluateMostEffectiveK(TEST, TESTCLASSES, TRAIN, TRAINCLASSES, highestK)
 
-elements = numel(TRAINCLASSES);
-
-effectiveness = 0;
-bestK = 0;
+elements = numel(TESTCLASSES);
 
 effective = zeros(1,elements-1);
-tic;
 
-for i = 1:numel(highestK)
-    
-    k = highestK(i);
-    if i == 1
-       [knnCLASSES dist] = knn(TRAIN,TRAIN,TRAINCLASSES,k,true);
-    else
-       knnCLASSES = knn(TRAIN,TRAIN,TRAINCLASSES,k,true, dist); 
-    end
-    
-    if isnumeric(knnCLASSES(1))
-        absolutDiff = nnz(~(TRAINCLASSES == knnCLASSES));
-    else
-        absolutDiff = nnz(~strcmp(TRAINCLASSES,knnCLASSES));
-    end
-    difference = absolutDiff/elements;
-    effective(k) = 1-(difference);
-    
-    if effective(k) > effectiveness
-        effectiveness = effective(k);
-        bestK = k;
-    end
-    
-end
-toc;
-fprintf('%s\n\n','#####################################');
+mahalClasses = mahalClassify(TEST, TRAIN, TRAINCLASSES);
+absolutDiff = nnz(~(TESTCLASSES == mahalClasses));
+difference = absolutDiff/elements;
+effectiveness = 1-(difference);
+
+bestK = 1;
+
+% effectiveness = 0;
+% 
+% for i = 1:numel(highestK)
+%     
+%     k = highestK(i);
+%     if i == 1
+%        [knnCLASSES dist] = knn(TEST, TRAIN, TRAINCLASSES, k, false);
+%     else
+%        knnCLASSES = knn(TEST, TRAIN, TRAINCLASSES, k, false, dist); 
+%     end
+%     
+%     absolutDiff = nnz(~(TESTCLASSES == knnCLASSES));
+%     
+%     difference = absolutDiff/elements;
+%     effective(k) = 1-(difference);
+%     
+%     if effective(k) > effectiveness
+%         effectiveness = effective(k);
+%         bestK = k;
+%     end
+%     
+% end
 
 end

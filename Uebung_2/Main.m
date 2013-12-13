@@ -5,12 +5,15 @@ clear;
 %Split original Data into Train and Test Sets
 TRAINSETS = cell(1);
 TESTSETS = cell(1);
-trainFactors = [0.9 0.75 0.5 0.3];
+BESTFEATURESPERSET = cell(1);
+GLOBALBESTFEATURES = cell(1);
+
+trainFactors = [0.9 0.7 0.5];
 numOfSets = numel(trainFactors);
 
 for i = 1:numOfSets
     [TR, TRC, TS, TSC] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, ...
-                            trainFactors(i), i);
+                            trainFactors(i), 1);
     
     trainStruct.data = TR;
     trainStruct.class = TRC;
@@ -19,13 +22,31 @@ for i = 1:numOfSets
     testStruct.data = TS;
     testStruct.class = TSC;
     TESTSETS{i} = testStruct;
+    
+    BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,1);
+    %BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
+    
+    if i ~= 1
+        GLOBALBESTFEATURES = intersect(GLOBALBESTFEATURES,BESTFEATURESPERSET{i}(:,4));
+    else
+        GLOBALBESTFEATURES = BESTFEATURESPERSET{i}(:,4);
+    end
+    
 end
+
+%Get minimum combination of Features, that classifies more than 95 per cent
+%correctly. => find shortest string in cell array
+%Source: http://www.mathworks.com/matlabcentral/answers/63551
+
+val = cellfun(@(x) numel(x),GLOBALBESTFEATURES);
+out = GLOBALBESTFEATURES(val==min(val));
+bestColumns = str2num(out{1}); %#ok<ST2NM>
 
 
 disp('# of missclassified Elements');
 for i = 1 : numOfSets
-    mahalResult = mahalClassify(TESTSETS{i}.data, TRAINSETS{i}.data, TRAINSETS{i}.class, true);
-    knnResult = knn(TESTSETS{i}.data, TRAINSETS{i}.data, TRAINSETS{i}.class, 1);
+    mahalResult = mahalClassify(TESTSETS{i}.data(:,bestColumns), TRAINSETS{i}.data(:,bestColumns), TRAINSETS{i}.class, true);
+    knnResult = knn(TESTSETS{i}.data(:,bestColumns), TRAINSETS{i}.data(:,bestColumns), TRAINSETS{i}.class, 1);
     
     fprintf('\tTest Set %d (%d Elements in Total) Mahal: %d KNN: %d\n',...
                 i, ...
@@ -34,11 +55,11 @@ for i = 1 : numOfSets
                 nnz(~(knnResult == TESTSETS{i}.class))); 
 end
 
-[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,[1:10]);
+%[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1:10);
 %bestColumns = [1,7,10,11,13];
 %bestK = 34;
 
-[SAMPLECLASSES, ~, EFFECTIVENESS] = knn(TRAIN(:,bestColumns), TRAIN(:,bestColumns), TRAINCLASSES, bestK, true);
+[SAMPLECLASSES, ~, EFFECTIVENESS] = knn(TRAIN(:,bestColumns), TRAIN(:,bestColumns), TRAINCLASSES, 1, true);
 
 elements = numel(TRAINCLASSES);
 mahal = zeros(size(TRAINCLASSES));

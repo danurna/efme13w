@@ -1,18 +1,20 @@
-function [bestColumns bestK mostEffective] = getBestColumns(TRAIN, TRAINCLASSES, highestK)
+function [bestCombinations mostEffective] = getBestColumns(TEST, TESTCLASSES, TRAIN, TRAINCLASSES, kInterval)
 
 
 colNum = size(TRAIN,2);
 featureColumns = 1:colNum;
 
-bestK = cell(1);
-bestColumns = cell(1);
+bestCombinations = cell(1,4);
 mostEffective = 0;
 
 totalPossibilities = 0;
 for i = 1:colNum
     totalPossibilities = totalPossibilities + nchoosek(colNum,i);
 end
+
 done = 0;
+nextRow = 0;
+blub = 0;
 
 for i = 1:colNum
     
@@ -20,24 +22,36 @@ for i = 1:colNum
     possibilities = size(chosenColumns,1);
     
     for j = 1:possibilities
-        fprintf('Possibility %d of %d\n', j+done,totalPossibilities);
-        [k effectiveness] = evaluateMostEffectiveK(TRAIN(:,chosenColumns(j,:)), TRAINCLASSES, highestK);
-        if effectiveness >= mostEffective
-            mostEffective = effectiveness;
-            nextCell = size(bestK,2);
-            bestK{nextCell} = k;
-            bestColumns{nextCell} = chosenColumns(j,:);
+        
+        
+        percentageDone = (j+done)/totalPossibilities*100;
+        if percentageDone > blub*10;
+            fprintf('currently at %.2f%%\n', percentageDone);
+            blub = blub+1;
         end
-        if mod(j,4) == 0
-            clc
-        end;
+        
+        [k effectiveness] = evaluateMostEffectiveK(...
+                            TEST(:,chosenColumns(j,:)), ...
+                            TESTCLASSES, ...
+                            TRAIN(:,chosenColumns(j,:)), ...
+                            TRAINCLASSES, kInterval);
+
+        
+        if effectiveness >= 0.95
+            if effectiveness > mostEffective
+                mostEffective = effectiveness;
+            end
+            nextRow = nextRow+1;
+            
+            bestCombinations{nextRow,1} = effectiveness;
+            bestCombinations{nextRow,2} = k;
+            bestCombinations{nextRow,3} = chosenColumns(j,:);
+            bestCombinations{nextRow,4} = num2str(chosenColumns(j,:));
+            
+        end
     end
     done = done + j;
     
 end
-
-disp(bestColumns);
-disp(bestK);
-disp(mostEffective);
 
 end
