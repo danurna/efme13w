@@ -23,7 +23,7 @@ for i = 1:numOfSets
     testStruct.class = TSC;
     TESTSETS{i} = testStruct;
     
-    BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,1);
+    BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
     %BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
     
     if i ~= 1

@@ -1,4 +1,4 @@
-function [bestCombinations mostEffective] = getBestColumns(TEST, TESTCLASSES, TRAIN, TRAINCLASSES, kInterval)
+function [bestCombinations mostEffective] = getBestColumns(TEST, TESTCLASSES, TRAIN, TRAINCLASSES, type, kInterval)
 
 
 colNum = size(TRAIN,2);
@@ -30,12 +30,25 @@ for i = 1:colNum
             blub = blub+1;
         end
         
-        [k effectiveness] = evaluateMostEffectiveK(...
+        if strcmp(type,'mahalanobis')
+            k = 1;
+            mahalClasses = mahalClassify(...
                             TEST(:,chosenColumns(j,:)), ...
-                            TESTCLASSES, ...
                             TRAIN(:,chosenColumns(j,:)), ...
-                            TRAINCLASSES, kInterval);
-
+                            TRAINCLASSES);
+                        
+            absolutDiff = nnz(~(TESTCLASSES == mahalClasses));
+            difference = absolutDiff/numel(TESTCLASSES);
+            
+            effectiveness = 1-(difference);
+            
+        else
+            [k effectiveness] = evaluateMostEffectiveK(...
+                TEST(:,chosenColumns(j,:)), ...
+                TESTCLASSES, ...
+                TRAIN(:,chosenColumns(j,:)), ...
+                TRAINCLASSES, kInterval);
+        end
         
         if effectiveness >= 0.95
             if effectiveness > mostEffective
