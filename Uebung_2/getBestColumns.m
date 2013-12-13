@@ -4,30 +4,35 @@ function [bestColumns bestK mostEffective] = getBestColumns(TRAIN, TRAINCLASSES,
 colNum = size(TRAIN,2);
 featureColumns = 1:colNum;
 
-bestK = 0;
+bestK = cell(1);
+bestColumns = cell(1);
 mostEffective = 0;
-bestColumns = 1;
 
+totalPossibilities = 0;
+for i = 1:colNum
+    totalPossibilities = totalPossibilities + nchoosek(colNum,i);
+end
+done = 0;
 
 for i = 1:colNum
     
     chosenColumns = nchoosek(featureColumns,i);
     possibilities = size(chosenColumns,1);
     
-    fprintf('Choose %d of %d features (%d possibilities)\n',i,colNum,possibilities);
-    
     for j = 1:possibilities
-        fprintf('Possibility %d of %d\n', j,possibilities);
+        fprintf('Possibility %d of %d\n', j+done,totalPossibilities);
         [k effectiveness] = evaluateMostEffectiveK(TRAIN(:,chosenColumns(j,:)), TRAINCLASSES, highestK);
-        if effectiveness > mostEffective
+        if effectiveness >= mostEffective
             mostEffective = effectiveness;
-            bestK = k;
-            bestColumns = chosenColumns(j,:);
+            nextCell = size(bestK,2);
+            bestK{nextCell} = k;
+            bestColumns{nextCell} = chosenColumns(j,:);
         end
         if mod(j,4) == 0
             clc
         end;
     end
+    done = done + j;
     
 end
 

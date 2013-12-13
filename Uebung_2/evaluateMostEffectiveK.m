@@ -7,9 +7,11 @@ bestK = 0;
 
 effective = zeros(1,elements-1);
 tic;
-for k = 1:highestK
+
+for i = 1:numel(highestK)
     
-    if k == 1
+    k = highestK(i);
+    if i == 1
        [knnCLASSES dist] = knn(TRAIN,TRAIN,TRAINCLASSES,k,true);
     else
        knnCLASSES = knn(TRAIN,TRAIN,TRAINCLASSES,k,true, dist); 
