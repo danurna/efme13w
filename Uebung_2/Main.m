@@ -70,7 +70,7 @@ for i = 1 : numOfSets
     
     k = {bestFeaturesPerSet{1,i}(strcmp(bestFeaturesPerSet{1,i}(:,4),out{1}),2)};
     
-    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k{1});
+    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k{1}{1});
     
     totalMahal = nnz(mahalResult == testSets{i}.class);
     relativeMahal = 100*(totalMahal/numel(testSets{i}.class));
