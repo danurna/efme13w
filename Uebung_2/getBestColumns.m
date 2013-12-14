@@ -59,7 +59,7 @@ for i = 1:colNum
             bestCombinations{nextRow,1} = effectiveness;
             bestCombinations{nextRow,2} = k;
             bestCombinations{nextRow,3} = chosenColumns(j,:);
-            bestCombinations{nextRow,4} = num2str(chosenColumns(j,:));
+            bestCombinations{nextRow,4} = num2str(chosenColumns(j,:),'%02d ');
             
         end
     end

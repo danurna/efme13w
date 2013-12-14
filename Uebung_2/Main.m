@@ -23,8 +23,13 @@ for i = 1:numOfSets
     testStruct.class = TSC;
     testSets{i} = testStruct;
     
+<<<<<<< HEAD
     %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
     bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:20);
+=======
+    bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
+    %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
+>>>>>>> ddb0103539e284300fb38cd2d40f310a888493ce
     
     if i ~= 1
         globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
