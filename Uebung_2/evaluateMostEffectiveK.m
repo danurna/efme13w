@@ -10,17 +10,17 @@ for i = 1:numel(highestK)
     
     k = highestK(i);
     if i == 1
-       [knnCLASSES dist] = knn(TEST, TRAIN, TRAINCLASSES, k, false);
+       [knnCLASSES dist] = knn(TEST, TRAIN, TRAINCLASSES, k, isequal(TEST,TRAIN));
     else
-       knnCLASSES = knn(TEST, TRAIN, TRAINCLASSES, k, false, dist); 
+       knnCLASSES = knn(TEST, TRAIN, TRAINCLASSES, k, isequal(TEST,TRAIN), dist); 
     end
     
-    absolutDiff = nnz(~(TESTCLASSES == knnCLASSES));
+    absolutDiff = nnz((TESTCLASSES == knnCLASSES));
     
-    difference = absolutDiff/elements;
-    effective(k) = 1-(difference);
+    relative = absolutDiff/elements;
+    effective(k) = relative;
     
-    if effective(k) > effectiveness
+    if effective(k) >= effectiveness
         effectiveness = effective(k);
         bestK = k;
     end

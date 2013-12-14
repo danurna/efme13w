@@ -27,8 +27,8 @@ for i = 1:numOfSets
     
     dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
     
-    bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
-    %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
+    %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
+    bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:1);
     
     dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepprev');
     
