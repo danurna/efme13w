@@ -37,10 +37,10 @@ for i = 1:colNum
                             TRAIN(:,chosenColumns(j,:)), ...
                             TRAINCLASSES);
                         
-            absolutDiff = nnz(~(TESTCLASSES == mahalClasses));
+            absolutDiff = nnz((TESTCLASSES == mahalClasses));
             difference = absolutDiff/numel(TESTCLASSES);
             
-            effectiveness = 1-(difference);
+            effectiveness = difference;
             
         else
             [k effectiveness] = evaluateMostEffectiveK(...
