@@ -20,7 +20,7 @@ for i = 1:numel(highestK)
     relative = absolutDiff/elements;
     effective(k) = relative;
     
-    if effective(k) >= effectiveness
+    if effective(k) > effectiveness
         effectiveness = effective(k);
         bestK = k;
     end
