@@ -69,8 +69,9 @@ for i = 1 : numOfSets
     mahalResult = mahalClassify(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, true);
     
     k = {bestFeaturesPerSet{1,i}(strcmp(bestFeaturesPerSet{1,i}(:,4),out{1}),2)};
+    k = k{1}{1};
     
-    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k{1}{1});
+    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k);
     
     totalMahal = nnz(mahalResult == testSets{i}.class);
     relativeMahal = 100*(totalMahal/numel(testSets{i}.class));
@@ -78,10 +79,10 @@ for i = 1 : numOfSets
     totalKnn = nnz(knnResult == testSets{i}.class);
     relativeKnn = 100*(totalKnn/numel(testSets{i}.class));
     
-    fprintf('\tSet %d: Mahalanobis %2.2f%% | KNN %2.2f%% \n',...
+    fprintf('\tSet %d: Mahalanobis %2.2f%% | KNN %2.2f%% (k: %d)\n',...
                 i, ...
                 relativeMahal, ...
-                relativeKnn); 
+                relativeKnn, k);
 end
 
 %[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1:10);
