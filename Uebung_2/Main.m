@@ -10,7 +10,7 @@ testSets = cell(1);
 bestFeaturesPerSet = cell(1);
 globalBestFeatures = cell(1);
 
-trainFactors = [0.75 0.75 0.75];
+trainFactors = [0.9 0.7 0.5];
 numOfSets = numel(trainFactors);
 
 for i = 1:numOfSets
