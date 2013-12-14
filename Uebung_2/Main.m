@@ -68,9 +68,9 @@ disp('Effectiveness (percentage of correctly classified elements) of different c
 for i = 1 : numOfSets
     mahalResult = mahalClassify(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, true);
     
-    k = bestFeaturesPerSet{1,i}(strcmp(bestFeaturesPerSet{1,i}(:,4),out{1}),2);
+    k = {bestFeaturesPerSet{1,i}(strcmp(bestFeaturesPerSet{1,i}(:,4),out{1}),2)};
     
-    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k);
+    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k{1});
     
     totalMahal = nnz(mahalResult == testSets{i}.class);
     relativeMahal = 100*(totalMahal/numel(testSets{i}.class));
