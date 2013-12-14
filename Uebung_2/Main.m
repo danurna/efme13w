@@ -24,7 +24,7 @@ for i = 1:numOfSets
     testSets{i} = testStruct;
     
     bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
-    %BESTFEATURESPERSET{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
+    %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
     
     if i ~= 1
         globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
