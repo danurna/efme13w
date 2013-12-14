@@ -28,7 +28,7 @@ for i = 1:numOfSets
     dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
     
     %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
-    bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:1);
+    bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',2:5);
     
     dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepprev');
     
@@ -41,25 +41,25 @@ for i = 1:numOfSets
 end
 
 % Find the best (=least) combination of columns from intersected features.
-bestColumns = [];
-shortest = Inf;
-
-for i = 1:size(globalBestFeatures,1)
-    % Convert strings to values and compare the length
-    columnsToTest = [str2num(globalBestFeatures{i})];
-    if( size(columnsToTest, 2) < shortest )
-       bestColumns = columnsToTest;
-       shortest = size(bestColumns, 2);
-    end
-end
+% bestColumns = [];
+% shortest = Inf;
+% 
+% for i = 1:size(globalBestFeatures,1)
+%     % Convert strings to values and compare the length
+%     columnsToTest = [str2num(globalBestFeatures{i})];
+%     if( size(columnsToTest, 2) < shortest )
+%        bestColumns = columnsToTest;
+%        shortest = size(bestColumns, 2);
+%     end
+% end
 
 %Get minimum combination of Features, that classifies more than 95 per cent
 %correctly. => find shortest string in cell array
 %Source: http://www.mathworks.com/matlabcentral/answers/63551
 
-%val = cellfun(@(x) numel(x),globalBestFeatures);
-%out = globalBestFeatures(val==min(val));
-%bestColumns = str2num(out{1}); %#ok<ST2NM>
+val = cellfun(@(x) numel(x),globalBestFeatures);
+out = globalBestFeatures(val==min(val));
+bestColumns = str2num(out{1}); %#ok<ST2NM>
 
 
 
@@ -67,7 +67,10 @@ end
 disp('Effectiveness (percentage of correctly classified elements) of different classifiers on different test sets');
 for i = 1 : numOfSets
     mahalResult = mahalClassify(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, true);
-    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, 1);
+    
+    k = bestFeaturesPerSet{1,i}(strcmp(bestFeaturesPerSet{1,i}(:,4),out{1}),2);
+    
+    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k);
     
     totalMahal = nnz(mahalResult == testSets{i}.class);
     relativeMahal = 100*(totalMahal/numel(testSets{i}.class));
