@@ -64,21 +64,27 @@ end
 
 
 
-disp('# of missclassified Elements');
+disp('Effectiveness (percentage of correctly classified elements) of different classifiers on different test sets');
 for i = 1 : numOfSets
     mahalResult = mahalClassify(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, true);
     knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, 1);
     
-    fprintf('\tTest Set %d (%d Elements in Total) Mahal: %d KNN: %d\n',...
+    totalMahal = nnz(mahalResult == testSets{i}.class);
+    relativeMahal = 100*(totalMahal/numel(testSets{i}.class));
+    
+    totalKnn = nnz(knnResult == testSets{i}.class);
+    relativeKnn = 100*(totalKnn/numel(testSets{i}.class));
+    
+    fprintf('\tSet %d: Mahalanobis %2.2f%% | KNN %2.2f%% \n',...
                 i, ...
-                size(testSets{i}.data, 1), ...
-                nnz(~(mahalResult == testSets{i}.class)), ...
-                nnz(~(knnResult == testSets{i}.class))); 
+                relativeMahal, ...
+                relativeKnn); 
 end
 
 %[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1:10);
 %bestColumns = [1,7,10,11,13];
 %bestK = 34;
+bestColumns = 1:13;
 
 [SAMPLECLASSES, ~, EFFECTIVENESS] = knn(TRAIN(:,bestColumns), TRAIN(:,bestColumns), TRAINCLASSES, 1, true);
 
@@ -92,8 +98,10 @@ for j = 1:elements
     matlabmahal(j) = classify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix),'mahalanobis');
 end
 
-fprintf('\tLOOCV (with best Feature combination) Mahal: %d KNN: %d\n', nnz(~(mahal == TRAINCLASSES)), nnz(~(SAMPLECLASSES == TRAINCLASSES)));
-fprintf('\tLOOCV (with best Feature combination) MatlabMahal: %d KNN: %d\n', nnz(~(matlabmahal == TRAINCLASSES)), nnz(~(SAMPLECLASSES == TRAINCLASSES)));
+fprintf('\n%s\n','Effectiveness for leave-one-out-cross-validation on whole data set');
+fprintf('\t%-20s %2.2f%% (equal covariance for each class)\n','Our Mahalanobis:',100*nnz(mahal == TRAINCLASSES)/elements);
+fprintf('\t%-20s %2.2f%%\n','Matlab Mahalanobis: ', 100*nnz(matlabmahal == TRAINCLASSES)/elements);
+fprintf('\t%-20s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elements);
 
 %tryAndPlotEveryK(TRAIN(:,bestColumns), TRAINCLASSES);
 
