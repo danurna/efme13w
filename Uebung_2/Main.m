@@ -2,6 +2,8 @@ clear;
 
 [TRAIN, TRAINCLASSES] = importTrainingSet('wine.data');
 
+dispstat('','init'); % One time only initialization
+
 %Split original Data into Train and Test Sets
 trainSets = cell(1);
 testSets = cell(1);
@@ -23,8 +25,12 @@ for i = 1:numOfSets
     testStruct.class = TSC;
     testSets{i} = testStruct;
     
+    dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
+    
     bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
     %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',1:30);
+    
+    dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepprev');
     
     if i ~= 1
         globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
