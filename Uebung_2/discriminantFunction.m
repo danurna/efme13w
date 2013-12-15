@@ -8,7 +8,7 @@ TRAIN = [A';B'];
 GROUP = [1,1,1,1,2,2,2];
 
 %COEF gives us the coefficients for the decision boundary.
-[CLASSIFIED, ~, ~, ~, COEF] = classify(TRAIN, TRAIN, GROUP, 'mahalanobis');
+[~, ~, ~, ~, COEF] = classify(TRAIN, TRAIN, GROUP, 'mahalanobis');
 gscatter(TRAIN(:,1), TRAIN(:,2), GROUP);
 
 hold on
@@ -43,6 +43,6 @@ g=ezplot('y = -2.4*x + 10.775',range);
 
 set(g,'Color','k')
 set(h,'Color','m')
-legend('A','B','mean','values', 'classify','connection line', 'covarianz', 'identity matrix')
+legend('A','B','mean','values', 'classify','connection line', 'covariance', 'identity matrix')
 
 %
