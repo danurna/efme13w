@@ -119,8 +119,8 @@ for j = 1:elements
 end
 
 fprintf('\n%s\n','Effectiveness for leave-one-out-cross-validation on whole data set');
-fprintf('\t%-20s %2.2f%% (equal covariance for each class)\n','Mahalanobis:',100*nnz(mahalFeatures == TRAINCLASSES)/elements);
-fprintf('\t%-20s %2.2f%% (different covariance for each class)\n','Mahalanobis: ', 100*nnz(matlabmahal == TRAINCLASSES)/elements);
-fprintf('\t%-20s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elements);
+fprintf('\t%-15s %2.2f%% (equal covariance for each class)\n','Mahalanobis:',100*nnz(mahalFeatures == TRAINCLASSES)/elements);
+fprintf('\t%-15s %2.2f%% (different covariance for each class)\n','Mahalanobis: ', 100*nnz(matlabmahal == TRAINCLASSES)/elements);
+fprintf('\t%-15s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elements);
 
 discriminantFunction;
