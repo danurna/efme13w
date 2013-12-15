@@ -33,7 +33,7 @@ for i = 1:numOfSets
     dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
     
     mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
-    knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:4);
+    knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20);
     
     tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));
     tmp2 = cell(numel(tmp)*2,4);
