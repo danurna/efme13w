@@ -70,6 +70,8 @@ for i = 1 : numOfSets
                 relativeKnn, k);
 end
 
+printPerformanceForDifferentK(testSets, trainSets, numOfSets, bestColumns);
+
 %[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1:10);
 %bestColumns = [1,7,10,11,13];
 %bestK = 34;
