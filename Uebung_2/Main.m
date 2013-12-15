@@ -40,23 +40,23 @@ for i = 1:numOfSets
     
 end
 
-% Find the best (=least) combination of columns from intersected features.
-bestColumns = [];
-shortest = Inf;
+%Get minimum combination of Features, that classifies more than 95 per cent
+%correctly. => find shortest string in cell array
+%Source: http://www.mathworks.com/matlabcentral/answers/63551
 
-for i = 1:size(globalBestFeatures,1)
-    % Convert strings to values and compare the length
-    columnsToTest = [str2num(globalBestFeatures{i})];
-    if( size(columnsToTest, 2) < shortest )
-       bestColumns = columnsToTest;
-       shortest = size(bestColumns, 2);
-    end
-end
+val = cellfun(@(x) numel(x),globalBestFeatures);
+out = globalBestFeatures(val==min(val));
+bestColumns = str2num(out{1}); %#ok<ST2NM>
+
 
 disp('Effectiveness (percentage of correctly classified elements) of different classifiers on different test sets');
 for i = 1 : numOfSets
     mahalResult = mahalClassify(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, true);
-    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, 1);
+    
+    k = {bestFeaturesPerSet{1,i}(strcmp(bestFeaturesPerSet{1,i}(:,4),out{1}),2)};
+    k = k{1}{1};
+    
+    knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k);
     
     totalMahal = nnz(mahalResult == testSets{i}.class);
     relativeMahal = 100*(totalMahal/numel(testSets{i}.class));
@@ -64,10 +64,10 @@ for i = 1 : numOfSets
     totalKnn = nnz(knnResult == testSets{i}.class);
     relativeKnn = 100*(totalKnn/numel(testSets{i}.class));
     
-    fprintf('\tSet %d: Mahalanobis %2.2f%% | KNN %2.2f%% \n',...
+    fprintf('\tSet %d: Mahalanobis %2.2f%% | KNN %2.2f%% (k: %d)\n',...
                 i, ...
                 relativeMahal, ...
-                relativeKnn); 
+                relativeKnn, k);
 end
 
 %[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1:10);
