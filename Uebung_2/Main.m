@@ -96,3 +96,4 @@ fprintf('\t%-20s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elemen
 
 %tryAndPlotEveryK(TRAIN(:,bestColumns), TRAINCLASSES);
 
+discriminantFunction;
