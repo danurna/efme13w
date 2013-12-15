@@ -4,6 +4,11 @@ clear;
 
 dispstat('','init'); % One time only initialization
 
+titles = ['KNN', 'Mahalanobis'];
+
+
+
+
 %Split original Data into Train and Test Sets
 trainSets = cell(1);
 testSets = cell(1);
@@ -27,8 +32,17 @@ for i = 1:numOfSets
     
     dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
     
-    %bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
-    bestFeaturesPerSet{i} = getBestColumns(TS,TSC,TR,TRC,'knn',2:5);
+    mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
+    knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:4);
+    
+    tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));
+    tmp2 = cell(numel(tmp)*2,4);
+    for x = 1:numel(tmp)
+        r = 2*x;
+        tmp2(r-1,:) = knnFeatures(strcmp(knnFeatures(:,4),tmp(x)),:);
+        tmp2(r,:) = mahalFeatures(strcmp(mahalFeatures(:,4),tmp(x)),:);
+    end
+    bestFeaturesPerSet{i} = tmp2;
     
     dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepprev');
     
@@ -68,8 +82,8 @@ disp('Effectiveness (percentage of correctly classified elements) of different c
 for i = 1 : numOfSets
     mahalResult = mahalClassify(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, true);
     
-    k = {bestFeaturesPerSet{1,i}(strcmp(bestFeaturesPerSet{1,i}(:,4),out{1}),2)};
-    k = k{1}{1};
+    k = cell2mat(bestFeaturesPerSet{i}(strcmp(bestFeaturesPerSet{i}(:,4),out{1}),2));
+    k = max(k);
     
     knnResult = knn(testSets{i}.data(:,bestColumns), trainSets{i}.data(:,bestColumns), trainSets{i}.class, k);
     
@@ -92,19 +106,19 @@ end
 [SAMPLECLASSES, ~, EFFECTIVENESS] = knn(TRAIN(:,bestColumns), TRAIN(:,bestColumns), TRAINCLASSES, 1, true);
 
 elements = numel(TRAINCLASSES);
-mahal = zeros(size(TRAINCLASSES));
+mahalFeatures = zeros(size(TRAINCLASSES));
 matlabmahal = zeros(size(TRAINCLASSES));
 
 for j = 1:elements
     ix = [1:j-1,j+1:elements]; %all indices except j
-    mahal(j) = mahalClassify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix));
+    mahalFeatures(j) = mahalClassify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix));
     matlabmahal(j) = classify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix),'mahalanobis');
 end
 
 fprintf('\n%s\n','Effectiveness for leave-one-out-cross-validation on whole data set');
-fprintf('\t%-20s %2.2f%% (equal covariance for each class)\n','Our Mahalanobis:',100*nnz(mahal == TRAINCLASSES)/elements);
+fprintf('\t%-20s %2.2f%% (equal covariance for each class)\n','Our Mahalanobis:',100*nnz(mahalFeatures == TRAINCLASSES)/elements);
 fprintf('\t%-20s %2.2f%%\n','Matlab Mahalanobis: ', 100*nnz(matlabmahal == TRAINCLASSES)/elements);
 fprintf('\t%-20s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elements);
 
-%tryAndPlotEveryK(TRAIN(:,bestColumns), TRAINCLASSES);
+main4
 
