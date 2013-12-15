@@ -43,5 +43,6 @@ g=ezplot('y = -2.4*x + 10.775',range);
 
 set(g,'Color','k')
 set(h,'Color','m')
+legend('A','B','mean','values', 'classify','connection line', 'covarianz', 'identity matrix')
 
 %
