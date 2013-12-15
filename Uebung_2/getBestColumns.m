@@ -26,7 +26,7 @@ for i = 1:colNum
         
         percentageDone = (j+done)/totalPossibilities*100;
         if percentageDone >= blub*5;
-            dispstat(sprintf('Progress: |%-20s| %2.0f%%',repmat('=',1,blub),percentageDone));
+            dispstat(sprintf('%s: |%-20s| %2.0f%%',type, repmat('=',1,blub),percentageDone));
             blub = blub+1;
         end
         
