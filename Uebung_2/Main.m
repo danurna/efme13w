@@ -6,7 +6,7 @@ dispstat('','init'); % One time only initialization
 
 titles = ['KNN', 'Mahalanobis'];
 
-
+calculateFeatures = false;
 
 
 %Split original Data into Train and Test Sets
@@ -20,7 +20,7 @@ numOfSets = numel(trainFactors);
 
 for i = 1:numOfSets
     [TR, TRC, TS, TSC] = splitDataIntoTestAndTraining(TRAIN, TRAINCLASSES, ...
-                            trainFactors(i), i);
+        trainFactors(i), i);
     
     trainStruct.data = TR;
     trainStruct.class = TRC;
@@ -30,29 +30,42 @@ for i = 1:numOfSets
     testStruct.class = TSC;
     testSets{i} = testStruct;
     
-    dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
-    
-    mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
-    knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20);
-    
-    tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));
-    tmp2 = cell(numel(tmp)*2,4);
-    for x = 1:numel(tmp)
-        r = 2*x;
-        tmp2(r-1,:) = knnFeatures(strcmp(knnFeatures(:,4),tmp(x)),:);
-        tmp2(r,:) = mahalFeatures(strcmp(mahalFeatures(:,4),tmp(x)),:);
-    end
-    bestFeaturesPerSet{i} = tmp2;
-    
-    dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepprev');
-    
-    if i ~= 1
-        globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
-    else
-        globalBestFeatures = bestFeaturesPerSet{i}(:,4);
+    if calculateFeatures
+        dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
+        
+        mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
+        knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20);
+        
+        tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));
+        tmp2 = cell(numel(tmp)*2,4);
+        for x = 1:numel(tmp)
+            r = 2*x;
+            tmp2(r-1,:) = knnFeatures(strcmp(knnFeatures(:,4),tmp(x)),:);
+            tmp2(r,:) = mahalFeatures(strcmp(mahalFeatures(:,4),tmp(x)),:);
+        end
+        bestFeaturesPerSet{i} = tmp2;
+        
+        
+        if i ~= 1
+            globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
+        else
+            globalBestFeatures = bestFeaturesPerSet{i}(:,4);
+        end
+        dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepprev');        
     end
     
 end
+
+if ~calculateFeatures
+    line = '##############################################';
+    line1 = '   Feature calculation has been turned off';
+    line2 = '   to save you some time. Using pre ';
+    line3 = '   calculated data instead';
+    
+    fprintf('#%-46s#\n#%-46s#\n#%-46s#\n#%-46s#\n#%-46s#\n',line, line1, line2, line3, line);
+    load('bestFeaturesResultsK_1_20');
+end
+
 
 %Get minimum combination of Features, that classifies more than 95 per cent
 %correctly. => find shortest string in cell array
@@ -80,9 +93,9 @@ for i = 1 : numOfSets
     relativeKnn = 100*(totalKnn/numel(testSets{i}.class));
     
     fprintf('\tSet %d: Mahalanobis %2.2f%% | KNN %2.2f%% (k: %d)\n',...
-                i, ...
-                relativeMahal, ...
-                relativeKnn, k);
+        i, ...
+        relativeMahal, ...
+        relativeKnn, k);
 end
 
 printPerformanceForDifferentK(testSets, trainSets, numOfSets, bestColumns);
@@ -107,7 +120,5 @@ fprintf('\n%s\n','Effectiveness for leave-one-out-cross-validation on whole data
 fprintf('\t%-20s %2.2f%% (equal covariance for each class)\n','Our Mahalanobis:',100*nnz(mahalFeatures == TRAINCLASSES)/elements);
 fprintf('\t%-20s %2.2f%%\n','Matlab Mahalanobis: ', 100*nnz(matlabmahal == TRAINCLASSES)/elements);
 fprintf('\t%-20s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elements);
-
-main4
 
 discriminantFunction;
