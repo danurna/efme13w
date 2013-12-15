@@ -60,9 +60,11 @@ if ~calculateFeatures
     line = '##############################################';
     line1 = '   Feature calculation has been turned off';
     line2 = '   to save you some time. Using pre ';
-    line3 = '   calculated data instead';
+    line3 = '   calculated data instead.';
+    line4 = '   To do the calculation, set';
+    line5 = '   calculateFeatures in LINE 8 to TRUE';
     
-    fprintf('#%-46s#\n#%-46s#\n#%-46s#\n#%-46s#\n#%-46s#\n',line, line1, line2, line3, line);
+    fprintf(' #%-46s#\n #%-46s#\n #%-46s#\n #%-46s#\n #%-46s#\n #%-46s#\n #%-46s#\n #%-46s#\n',line, line1, line2, line3,'', line4, line5, line);
     load('bestFeaturesResultsK_1_20');
 end
 
@@ -113,12 +115,12 @@ matlabmahal = zeros(size(TRAINCLASSES));
 for j = 1:elements
     ix = [1:j-1,j+1:elements]; %all indices except j
     mahalFeatures(j) = mahalClassify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix));
-    matlabmahal(j) = classify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix),'mahalanobis');
+    matlabmahal(j) = mahalClassify(TRAIN(j,bestColumns),TRAIN(ix,bestColumns),TRAINCLASSES(ix), false);
 end
 
 fprintf('\n%s\n','Effectiveness for leave-one-out-cross-validation on whole data set');
-fprintf('\t%-20s %2.2f%% (equal covariance for each class)\n','Our Mahalanobis:',100*nnz(mahalFeatures == TRAINCLASSES)/elements);
-fprintf('\t%-20s %2.2f%%\n','Matlab Mahalanobis: ', 100*nnz(matlabmahal == TRAINCLASSES)/elements);
+fprintf('\t%-20s %2.2f%% (equal covariance for each class)\n','Mahalanobis:',100*nnz(mahalFeatures == TRAINCLASSES)/elements);
+fprintf('\t%-20s %2.2f%% (different covariance for each class)\n','Mahalanobis: ', 100*nnz(matlabmahal == TRAINCLASSES)/elements);
 fprintf('\t%-20s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elements);
 
 discriminantFunction;
