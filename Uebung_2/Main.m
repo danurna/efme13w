@@ -46,7 +46,8 @@ end
 
 val = cellfun(@(x) numel(x),globalBestFeatures);
 out = globalBestFeatures(val==min(val));
-bestColumns = str2num(out{1}); %#ok<ST2NM>
+%print our best columns choice.
+bestColumns = str2num(out{1}) %#ok<ST2NM>
 
 
 disp('Effectiveness (percentage of correctly classified elements) of different classifiers on different test sets');

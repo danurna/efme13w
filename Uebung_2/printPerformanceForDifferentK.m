@@ -1,7 +1,8 @@
+% Classifies with different values of k for given data and columns. Prints
+% out the mean error rate for one value of k for all sets.
 function printPerformanceForDifferentK(testSets, trainSets, numOfSets, bestColumns)
 
 fprintf('Test performance for different K values for bestColumns\n');
-bestColumns
 
 for k = 1 : 10 
     errorRate = 0;
