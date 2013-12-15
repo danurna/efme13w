@@ -15,7 +15,7 @@ testSets = cell(1);
 bestFeaturesPerSet = cell(1);
 globalBestFeatures = cell(1);
 
-trainFactors = [0.9 0.7 0.5];
+trainFactors = [0.8 0.6 0.5];
 numOfSets = numel(trainFactors);
 
 for i = 1:numOfSets
@@ -54,28 +54,14 @@ for i = 1:numOfSets
     
 end
 
-% Find the best (=least) combination of columns from intersected features.
-% bestColumns = [];
-% shortest = Inf;
-% 
-% for i = 1:size(globalBestFeatures,1)
-%     % Convert strings to values and compare the length
-%     columnsToTest = [str2num(globalBestFeatures{i})];
-%     if( size(columnsToTest, 2) < shortest )
-%        bestColumns = columnsToTest;
-%        shortest = size(bestColumns, 2);
-%     end
-% end
-
 %Get minimum combination of Features, that classifies more than 95 per cent
 %correctly. => find shortest string in cell array
 %Source: http://www.mathworks.com/matlabcentral/answers/63551
 
 val = cellfun(@(x) numel(x),globalBestFeatures);
 out = globalBestFeatures(val==min(val));
-bestColumns = str2num(out{1}); %#ok<ST2NM>
-
-
+%print our best columns choice.
+bestColumns = str2num(out{1}) %#ok<ST2NM>
 
 
 disp('Effectiveness (percentage of correctly classified elements) of different classifiers on different test sets');
@@ -98,6 +84,8 @@ for i = 1 : numOfSets
                 relativeMahal, ...
                 relativeKnn, k);
 end
+
+printPerformanceForDifferentK(testSets, trainSets, numOfSets, bestColumns);
 
 %[bestColumns bestK] = getBestColumns(TRAIN,TRAINCLASSES,1:10);
 %bestColumns = [1,7,10,11,13];
@@ -122,3 +110,4 @@ fprintf('\t%-20s %2.2f%%\n','KNN:',100*nnz(SAMPLECLASSES == TRAINCLASSES)/elemen
 
 main4
 
+discriminantFunction;
