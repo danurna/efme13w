@@ -1,0 +1,1 @@
+inputs = load('data/perceptrondata.dat');
