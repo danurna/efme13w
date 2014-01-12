@@ -18,14 +18,13 @@ while ( ~allGood && count < MAXEPOCH )
             W = W + gamma*unWeighted;
             allGood = false;
         end
-        
-        if nargout > 1
-            OUTPUT(i) = sign(dot(W,INPUT(:,i)));
-        end
     end
     
     count = count +1;
 end
 
+if nargout > 1
+    OUTPUT(i) = sign(dot(W,INPUT(:,i)));
+end
 
 end
