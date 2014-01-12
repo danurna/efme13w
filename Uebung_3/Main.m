@@ -1,7 +1,7 @@
 dispstat('','init');
 
 %----------------PERCEPTRON-----------------
-perceptron
+ourPerceptron
 
 
 %-----------------STROKES-------------------

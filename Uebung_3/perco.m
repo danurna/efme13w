@@ -1,4 +1,4 @@
-function [W, OUTPUT] = perco(INPUT, TARGET, MAXEPOCH)
+function [W, OUTPUT, count] = perco(INPUT, TARGET, MAXEPOCH)
 
 N = size(INPUT,2);
 W = repmat(0.1,size(INPUT,1),1);
@@ -7,8 +7,8 @@ gamma = 0.5;
 OUTPUT = zeros(size(TARGET));
 
 allGood = false;
-
 count = 0;
+
 while ( ~allGood && count < MAXEPOCH )
     allGood = true;
     
@@ -24,7 +24,9 @@ while ( ~allGood && count < MAXEPOCH )
 end
 
 if nargout > 1
-    OUTPUT(i) = sign(dot(W,INPUT(:,i)));
+    for i = 1:N
+        OUTPUT(i) = sign(dot(W,INPUT(:,i)));
+    end
 end
 
 end

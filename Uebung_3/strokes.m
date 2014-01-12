@@ -6,14 +6,20 @@ load('data/strokefeatures.mat');
 [TRAIN TRAINCLASSES TEST TESTCLASSES] = splitDataIntoTestAndTraining( ...
     features_class(:,1:20), ...
     features_class(:,21), ...
-    0.8, ...
+    0.5, ...
     1 ...
 );
 
 PERCOTRAIN = vertcat(ones(size(TRAINCLASSES))',TRAIN');
-wetDryClasses = TRAINCLASSES;
-wetDryClasses(TRAINCLASSES <= 3) = -1;
-wetDryClasses(TRAINCLASSES > 3) = 1;
+
+wetDryTrain = TRAINCLASSES;
+wetDryTrain(TRAINCLASSES <= 3) = -1;
+wetDryTrain(TRAINCLASSES > 3) = 1;
+
+PERCOTEST = vertcat(ones(size(TESTCLASSES))',TEST');
+wetDryTest = TESTCLASSES;
+wetDryTest(TESTCLASSES <= 3) = -1;
+wetDryTest(TESTCLASSES > 3) = 1;
 
 clearvars features_class;
 
@@ -23,4 +29,7 @@ nnz(knnResult == TESTCLASSES)
 mahalResult = mahalClassify(TEST(:,1:10), TRAIN(:,1:10), TRAINCLASSES, false);
 nnz(mahalResult == TESTCLASSES)
 
-[w, out] = perco(PERCOTRAIN,wetDryClasses,1000);
+[w, out, count] = perco(PERCOTRAIN(1:11,:),wetDryTrain,5000);
+percResult = percClassify(w,PERCOTEST(1:11,:));
+nnz(percResult == wetDryTest)
+
