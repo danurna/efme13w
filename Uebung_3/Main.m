@@ -8,4 +8,13 @@ target2(target2 == 0) = -1;
 
 inputs = inputs';
 
-[w, out] = perco(inputs,target1,1000);
+TWOBIT = [  1 1 1 1
+            0 1 0 1
+            0 0 1 1  ];
+
+AND = [-1, -1, -1, 1];
+OR = [-1, 1, 1, 1];
+XOR = [-1, 1, 1, -1];
+
+[w1, out1] = perco(inputs,target1,1000);
+%[w2, out2] = perco(inputs,target2,1000);
