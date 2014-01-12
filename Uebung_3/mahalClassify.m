@@ -88,6 +88,6 @@ end
 
 if EQUALCOV
     COV = COV ./ (N-1);
-    INVC(1:3) = {diag(diag(inv(COV)))};
+    INVC(1:end) = {diag(diag(inv(COV)))};
 end
 end
