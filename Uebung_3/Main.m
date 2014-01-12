@@ -8,4 +8,4 @@ target2(target2 == 0) = -1;
 
 inputs = inputs';
 
-perco(inputs,target1,1000);
+[w, out] = perco(inputs,target1,1000);
