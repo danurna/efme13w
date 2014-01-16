@@ -1,10 +1,20 @@
 function [W, count, bestClassified] = perco(INPUT, TARGET, MAXEPOCH, calcBest)
+%INPUT in following form: columns are features, lines are entities
+
+entities = size(INPUT,1);
+homogen = ones(1,entities);
+
+INPUT = vertcat(homogen,INPUT');
+
 
 if(~exist('calcBest','var'))
     calcBest = false;
+    if nargout > 2
+       error('When trying to get bestClassified, calcBest must be set!'); 
+    end
 end
 
-N = size(INPUT,2);
+N = entities;
 W = repmat(0.1,size(INPUT,1),1);
 gamma = 0.5;
 
@@ -12,8 +22,7 @@ allGood = false;
 count = 0;
 
 bestW = W;
-maxEffective = 0;
-
+maxEffective = -1;
 
 while ( ~allGood && count < MAXEPOCH )
     allGood = true;
