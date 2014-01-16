@@ -42,14 +42,25 @@ for i = 1:colNum
             
             effectiveness = difference;
         elseif strcmp(type, 'perceptron')
-             k = 0;
-             TRAIN = horzcat(ones(size(TRAIN,1),1),TRAIN);
-             [W, OUTPUT, count] = perco(TRAIN(:,chosenColumns(j,:)), TEST(:,chosenColumns(j,:)), 300);
-             size(W)
-             size(OUTPUT)
-             count
+            k = 0;
              
-            absolutDiff = nnz((TESTCLASSES == OUTPUT(:,1)));
+            %TRAIN
+            tmp = ones( size(TRAIN, 1), 1 );
+            tmp2 = TRAIN(:,chosenColumns(j,:));
+            PERCOTRAIN = vertcat(tmp', tmp2');
+            PERCOTRAINPRECLASSIFIED = TRAINCLASSES;
+             
+            %TEST
+            tmp = ones( size(TEST, 1), 1 );
+            tmp2 = TEST(:,chosenColumns(j,:));
+            PERCOTEST = vertcat(tmp', tmp2');
+            PERCOTESTPRECLASSIFIED = TESTCLASSES;
+             
+            [W, ~, ~] = perco(PERCOTRAIN, PERCOTRAINPRECLASSIFIED, 10, true);
+             
+            PERCOTESTCLASSIFIED = percClassify(W,PERCOTEST);
+             
+            absolutDiff = nnz((PERCOTESTPRECLASSIFIED == PERCOTESTCLASSIFIED(:,1)));
             difference = absolutDiff/numel(TESTCLASSES);
             
             effectiveness = difference;

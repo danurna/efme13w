@@ -1,7 +1,7 @@
 load('data/strokefeatures.mat');
 
 [TRAIN TRAINCLASSES TEST TESTCLASSES] = splitDataIntoTestAndTraining( ...
-    features_class(:,1:15), ...
+    features_class(:,1:10), ...
     features_class(:,21), ...
     0.7, ...
     1 ...
@@ -27,6 +27,7 @@ dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
         
 mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
 knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20);
+percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron');
       
         tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));
         tmp2 = cell(numel(tmp)*2,4);
@@ -35,7 +36,7 @@ knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20);
             tmp2(r-1,:) = knnFeatures(strcmp(knnFeatures(:,4),tmp(x)),:);
             tmp2(r,:) = mahalFeatures(strcmp(mahalFeatures(:,4),tmp(x)),:);
         end
-        bestFeaturesPerSet{i} = tmp2;
+        bestFeaturesPerSet{i} = tmp2per
         
         
         if i ~= 1
