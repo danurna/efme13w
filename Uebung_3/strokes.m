@@ -5,6 +5,7 @@ load('data/strokefeatures.mat');
 
 TR = normalizeInput(features_class(:,1:20));
 
+
 [TR TRC TS TSC] = splitDataIntoTestAndTraining( ...
     TR, ...
     features_class(:,21), ...
@@ -13,13 +14,19 @@ TR = normalizeInput(features_class(:,1:20));
 );
 
 %Changing class labels so that dry is 1,2,3 and wet 4,5,6
+
+TRC = features_class(:,21);
 TRC(TRC == 6) = -1;
 TRC(TRC > 2) = TRC(TRC > 2) +1;
 TRC(TRC == -1) = 3;
 
-TSC(TSC == 6) = -1;
-TSC(TSC > 2) = TSC(TSC > 2) +1;
-TSC(TSC == -1) = 3;
+
+[TR TRC TS TSC] = splitDataIntoTestAndTraining( ...
+    TR, ...
+    TRC, ...
+    0.8, ...
+    1 ...
+);
 
 if (true)
    FeatureSelection(TR, TRC, TS, TSC); 
@@ -33,62 +40,37 @@ bestFeautures = 1:10;
 TR = TR(:,bestFeautures);
 TS = TS(:,bestFeautures);
 
+numTR = numel(TRC);
+numTS = numel(TSC);
+
 knnResult = knn(TS, TR, TRC, 1);
-nnz(knnResult == TSC)
+effective = nnz(knnResult == TSC)/numTS
 
 mahalResult = mahalClassify(TS, TR, TRC);
-nnz(mahalResult == TSC)
+effective = nnz(mahalResult == TSC)/numTS
 
 
 wet = @(x) x>3;
-paint = @(x) x==4;
-pen = @(x) x==5;
+epoch = 1000;
 
-lead = @(x) x==1;
-chalk = @(x) x==2;
-
-epoch = 200;
-
-[wetDryTrainTarget wetDryTestTarget] = splitInTwo(TRC, ...
-    TSC , wet);
-
-wWet = perco(TR, wetDryTrainTarget,...
-    epoch, true);
+[wTRC wTSC] = splitInTwo(TRC, TSC , wet);
+percResult = perceptron(TS,TR,wTRC,epoch);
+effective = nnz(percResult == wTSC)/numTS
 
 
-[paintTrainTarget paintTestTarget] = splitInTwo(TRC(wet(TRC)), ...
-    TSC(wet(TSC)) , paint);
+names = {'lead','chalk','point','paint','pen','quill'};
+results = zeros(numTS,6);
 
-wPaint = perco(TR(wet(TRC),:), paintTrainTarget,...
-    epoch, true);
+for i = 1 : 6
+    
+    [tmpTRC tmpTSC] = splitInTwo(TRC,TSC, @(x) x==i);
+    result = perceptron(TS,TR,tmpTRC,epoch,true);
+    effective = nnz(sign(result) == tmpTSC)/numTS;
+    fprintf('%s: %.2f\n',names{i},effective);
+    
+    results(:,i) = result;
+    
+end
 
-
-
-[penTrainTarget penTestTarget] = splitInTwo(...
-    TRC(and(wet(TRC), ~paint(TRC))), ...
-    TSC(and(wet(TSC), ~paint(TSC))) , pen);
-
-wPen = perco(TR(and(wet(TRC), ~paint(TRC)),:), penTrainTarget,...
-    epoch, true);
-
-
-[leadTrainTarget leadTestTarget] = splitInTwo(TRC(~wet(TRC)),...
-    TSC(~wet(TSC)) , lead);
-
-wLead = perco(TR(~wet(TRC),:), leadTrainTarget,...
-    epoch, true);
-
-[chalkTrainTarget chalkTestTarget] = splitInTwo(...
-    TRC(and(~wet(TRC), ~lead(TRC))), ...
-    TSC , chalk);
-
-wChalk = perco(TR(and(~wet(TRC), ~lead(TRC)),:), chalkTrainTarget,...
-    epoch, true);
-
-a = percClassify(wWet,TS,true);
-wet = TS(wetDryTestTarget==1,:);
-b = percClassify(wPaint,wet,true);
-paint = wet(b==1,:);
-c = percClassify(wPen,paint,true);
-pen = paint(c==1,:);
-
+[~, percResult] = max(results, [], 2);
+effective = nnz(percResult == TSC)/numTS
