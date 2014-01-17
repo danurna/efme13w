@@ -78,7 +78,3 @@ wLead = perco(TR(~wet(TRC),:), leadTrainTarget,...
 wChalk = perco(TR(and(~wet(TRC), ~lead(TRC)),:), chalkTrainTarget,...
     epoch, true);
 
-
-
-
-
