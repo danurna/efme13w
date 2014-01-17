@@ -1,12 +1,12 @@
 function [mahalFeatures, knnFeatures, percoFeatures, globalBestFeatures] = FeatureSelection(TRAIN, TRAINCLASSES, TEST, TESTCLASSES)
 
-PERCOTRAIN = vertcat(ones(size(TRAINCLASSES))',TRAIN');
+%PERCOTRAIN = vertcat(ones(size(TRAINCLASSES))',TRAIN');
 
 wetDryTrain = TRAINCLASSES;
 wetDryTrain(TRAINCLASSES <= 3) = -1;
 wetDryTrain(TRAINCLASSES > 3) = 1;
 
-PERCOTEST = vertcat(ones(size(TESTCLASSES))',TEST');
+%PERCOTEST = vertcat(ones(size(TESTCLASSES))',TEST');
 wetDryTest = TESTCLASSES;
 wetDryTest(TESTCLASSES <= 3) = -1;
 wetDryTest(TESTCLASSES > 3) = 1;
@@ -18,8 +18,8 @@ TRC = wetDryTrain;
 i = 0;
 dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
             
-%mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis')
-%knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20)
+mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis')
+knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20)
 percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron')
       
         tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));

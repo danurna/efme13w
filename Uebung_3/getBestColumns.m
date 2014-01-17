@@ -32,7 +32,7 @@ for i = 1:colNum
         
         if strcmp(type,'mahalanobis')
             k = 0;
-            mahalClasses = mahalClassify(...
+            mahalClasses =  mahalClassify(...
                             TEST(:,chosenColumns(j,:)), ...
                             TRAIN(:,chosenColumns(j,:)), ...
                             TRAINCLASSES);
@@ -72,7 +72,7 @@ for i = 1:colNum
                 TRAINCLASSES, kInterval);
         end
         
-        if effectiveness >= 0.5 %empirisch
+        if effectiveness >= 0.7 %empirisch
             if effectiveness > mostEffective
                 mostEffective = effectiveness;
             end
