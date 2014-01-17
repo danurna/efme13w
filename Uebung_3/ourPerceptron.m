@@ -48,11 +48,13 @@ range = [0 1 0 1];
 
 %LOADED DATA
 for i = 1 : numel(target);
-    [w, count] = perco(inputs,target{i},100);
+    [w, count] = perco(inputs,target{i},100, true);
     
     figure(figH); figH = figH+1;
     gscatter(inputs(:,1),inputs(:,2),target{i}); hold on;
-    ezplot(@(x,y) w(1) + w(2)*x + w(3)*y, range); hold off;
+    ezplot(@(x,y) w(1) + w(2)*x + w(3)*y);
+    axis(range);
+    title(sprintf('%s%d','Target #',i));
+    
+    hold off;
 end
-
-dispstat('Ergebnisse und so');
