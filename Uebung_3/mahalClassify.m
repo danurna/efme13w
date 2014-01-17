@@ -39,7 +39,7 @@ for i = 1 : numOfClasses
     Classes{i} = TRAIN(TRAINCLASSES == uniqueClasses(i),:);
 end
 
-[INVC MEANS] = computeInverse(Classes,EQUALCOV);
+[COV MEANS] = computeInverse(Classes,EQUALCOV);
 
 numOfTestValues = size(TEST, 1);
 
@@ -50,7 +50,7 @@ TESTCLASS = zeros(numOfTestValues,1);
 for i = 1 : numOfClasses
     for j = 1 : numOfTestValues
         diff = (TEST(j,:)-MEANS{i});
-        tmpDist = diff * INVC{i} * diff';
+        tmpDist = diff / inv(COV{i}) * diff';
         
         if tmpDist < dist(j)
             dist(j) = tmpDist;
@@ -81,7 +81,7 @@ for i = 1 : numOfClasses
             COV = COV + diff' * diff;
         end
     else
-        INVC{i} = inv(cov(currentClass));
+        INVC{i} = cov(currentClass);
     end
     
 end
