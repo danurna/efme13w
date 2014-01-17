@@ -16,7 +16,7 @@ TRC(TRC == -1) = 3;
 [TR TRC TS TSC] = splitDataIntoTestAndTraining( ...
     TR, ...
     TRC, ...
-    0.8, ...
+    0.7, ...
     1 ...
 );
 
@@ -30,34 +30,48 @@ TS = TS(:,bestFeautures);
 numTR = numel(TRC);
 numTS = numel(TSC);
 
-knnResult = knn(TS, TR, TRC, 1);
-effective = nnz(knnResult == TSC)/numTS
+fprintf('%s','Wet/Dry with Perceptron: ');
+[wTRC wTSC] = splitInTwo(TRC, TSC , @(x) x>3);
+percResult = perceptron(TS,TR,wTRC,epoch);
+effective = nnz(percResult == wTSC)/numTS;
+fprintf('%.2f%% correct\n' , effective*100);
 
-mahalResult = mahalClassify(TS, TR, TRC);
-effective = nnz(mahalResult == TSC)/numTS
 
+fprintf('%s\nClassifying between 6 classes\n',repmat('#',1,60));
 
-wet = @(x) x>3;
+fprintf('%-30s','K-NN: ');
+knnResults = tryAndPlotEveryK(TS,TSC,TR,TRC);
+[effective k] = max(knnResults);
+fprintf('%.2f%% maximum correctnes(k = %d)\n' , 100*effective, k);
+
+hold on;
+
+fprintf('%-30s','Mahalanobis: ');
+mahalResult = classify(TS, TR, TRC,'mahalanobis');
+effective = nnz(mahalResult == TSC)/numTS;
+fprintf('%.2f%% correct\n',100*effective);
+
+line([1 numTS],[effective effective], 'LineStyle','--', 'Color', 'r')
+hold on;
+
 epoch = 1000;
 
-[wTRC wTSC] = splitInTwo(TRC, TSC , wet);
-percResult = perceptron(TS,TR,wTRC,epoch);
-effective = nnz(percResult == wTSC)/numTS
-
-
-names = {'lead','chalk','point','paint','pen','quill'};
+fprintf('%-30s', sprintf('Perceptron (%d Epochs): ', epoch));
 results = zeros(numTS,6);
 
 for i = 1 : 6
     
     [tmpTRC tmpTSC] = splitInTwo(TRC,TSC, @(x) x==i);
     result = perceptron(TS,TR,tmpTRC,epoch,true);
-    effective = nnz(sign(result) == tmpTSC)/numTS;
-    fprintf('%s: %.2f\n',names{i},effective);
-    
     results(:,i) = result;
     
 end
 
+
 [~, percResult] = max(results, [], 2);
-effective = nnz(percResult == TSC)/numTS
+effective = nnz(percResult == TSC)/numTS;
+fprintf('%.2f%% correct\n',100*effective);
+
+line([1 numTS],[effective effective], 'LineStyle','--', 'Color', 'g')
+legend('K-NN','Mahalanobis','Perceptron');
+hold off;
