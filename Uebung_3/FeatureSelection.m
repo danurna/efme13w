@@ -15,11 +15,11 @@ TR = TRAIN;
 TS = TEST;
 TSC = wetDryTest;
 TRC = wetDryTrain;
-i = 0;
+i = 1;
 dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
             
-mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis')
-knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20)
+%mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
+%knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:5);
 percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron')
       
         tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));
@@ -29,15 +29,13 @@ percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron')
             tmp2(r-1,:) = knnFeatures(strcmp(knnFeatures(:,4),tmp(x)),:);
             tmp2(r,:) = mahalFeatures(strcmp(mahalFeatures(:,4),tmp(x)),:);
         end
-        bestFeaturesPerSet{i} = tmp2per
+        bestFeaturesPerSet{i} = tmp2;
         
         
         if i ~= 1
             globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
         else
-            globalBestFeatures = bestFeaturesPerSet{i}(:,4);
+            globalBestFeatures = bestFeaturesPerSet{i}(:,4)
         end
-        dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepFinding best features for Test Set 0');
-        
-        
+                
 end

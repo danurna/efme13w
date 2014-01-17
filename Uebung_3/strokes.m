@@ -12,7 +12,6 @@ TR = normalizeInput(features_class(:,1:20));
     1 ...
 );
 
-
 %Changing class labels so that dry is 1,2,3 and wet 4,5,6
 TRC(TRC == 6) = -1;
 TRC(TRC > 2) = TRC(TRC > 2) +1;
@@ -23,7 +22,7 @@ TSC(TSC > 2) = TSC(TSC > 2) +1;
 TSC(TSC == -1) = 3;
 
 if (true)
-   FeatureSelection(TR, TRC, TS, TSC) 
+   FeatureSelection(TR, TRC, TS, TSC); 
 end
 
 

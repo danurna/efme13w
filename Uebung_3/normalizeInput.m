@@ -1,7 +1,7 @@
 function TRAIN = normalizeInput(INPUT)
 
-means = INPUT(:,1:5);
-vars = INPUT(:,11:15);
+means = INPUT(:,[1 2 4 5 7 9]);
+vars = INPUT(:,[11 13 14 15 16 17]);
 
 m = size(means,1);
 

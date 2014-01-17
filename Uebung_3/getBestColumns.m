@@ -32,10 +32,10 @@ for i = 1:colNum
         
         if strcmp(type,'mahalanobis')
             k = 0;
-            mahalClasses =  mahalClassify(...
+            mahalClasses =  classify(...
                             TEST(:,chosenColumns(j,:)), ...
                             TRAIN(:,chosenColumns(j,:)), ...
-                            TRAINCLASSES);
+                            TRAINCLASSES, 'mahalanobis');
                         
             absolutDiff = nnz((TESTCLASSES == mahalClasses));
             difference = absolutDiff/numel(TESTCLASSES);
@@ -72,7 +72,7 @@ for i = 1:colNum
                 TRAINCLASSES, kInterval);
         end
         
-        if effectiveness >= 0.7 %empirisch
+        if effectiveness >= 0.2 %empirisch
             if effectiveness > mostEffective
                 mostEffective = effectiveness;
             end
