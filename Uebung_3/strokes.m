@@ -5,14 +5,6 @@ load('data/strokefeatures.mat');
 
 TR = normalizeInput(features_class(:,1:20));
 
-
-[TR TRC TS TSC] = splitDataIntoTestAndTraining( ...
-    TR, ...
-    features_class(:,21), ...
-    0.8, ...
-    1 ...
-);
-
 %Changing class labels so that dry is 1,2,3 and wet 4,5,6
 
 TRC = features_class(:,21);
@@ -20,22 +12,21 @@ TRC(TRC == 6) = -1;
 TRC(TRC > 2) = TRC(TRC > 2) +1;
 TRC(TRC == -1) = 3;
 
-
 [TR TRC TS TSC] = splitDataIntoTestAndTraining( ...
     TR, ...
     TRC, ...
-    0.8, ...
+    0.7, ...
     1 ...
 );
 
-if (true)
-   FeatureSelection(TR, TRC, TS, TSC); 
+if (false)
+   [mahalFeatures, knnFeatures, percoFeatures, globalBestFeatures] = FeatureSelection(TR, TRC, TS, TSC); 
 end
 
 
 clearvars features_class;
 
-bestFeautures = 1:10;
+bestFeautures = [1 3 5 7];
 
 TR = TR(:,bestFeautures);
 TS = TS(:,bestFeautures);
@@ -43,7 +34,7 @@ TS = TS(:,bestFeautures);
 numTR = numel(TRC);
 numTS = numel(TSC);
 
-knnResult = knn(TS, TR, TRC, 1);
+knnResult = knn(TS, TR, TRC, 3);
 effective = nnz(knnResult == TSC)/numTS
 
 mahalResult = mahalClassify(TS, TR, TRC);

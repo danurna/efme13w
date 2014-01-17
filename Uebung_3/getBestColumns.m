@@ -43,24 +43,11 @@ for i = 1:colNum
             effectiveness = difference;
         elseif strcmp(type, 'perceptron')
             k = 0;
-             
-            %TRAIN
-            tmp = ones( size(TRAIN, 1), 1 );
-            tmp2 = TRAIN(:,chosenColumns(j,:));
-            PERCOTRAIN = vertcat(tmp', tmp2');
-            PERCOTRAINPRECLASSIFIED = TRAINCLASSES;
-             
-            %TEST
-            tmp = ones( size(TEST, 1), 1 );
-            tmp2 = TEST(:,chosenColumns(j,:));
-            PERCOTEST = vertcat(tmp', tmp2');
-            PERCOTESTPRECLASSIFIED = TESTCLASSES;
-             
-            [W, ~, ~] = perco(PERCOTRAIN, PERCOTRAINPRECLASSIFIED, 10, true, true);
-             
-            PERCOTESTCLASSIFIED = percClassify(W,PERCOTEST);
-             
-            absolutDiff = nnz((PERCOTESTPRECLASSIFIED == PERCOTESTCLASSIFIED(:,1)));
+            
+            percoClassified = perceptron(TEST(:,chosenColumns(j,:)), ...
+                TRAIN(:,chosenColumns(j,:)),TRAINCLASSES,10);
+            
+            absolutDiff = nnz((percoClassified == TESTCLASSES));
             difference = absolutDiff/numel(TESTCLASSES);
             
             effectiveness = difference;
@@ -72,7 +59,7 @@ for i = 1:colNum
                 TRAINCLASSES, kInterval);
         end
         
-        if effectiveness >= 0.2 %empirisch
+        if effectiveness >= 0.90 %empirisch
             if effectiveness > mostEffective
                 mostEffective = effectiveness;
             end
