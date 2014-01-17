@@ -1,7 +1,11 @@
-function CLASSES = percClassify(w,INPUT, homogenize)
+function CLASSES = percClassify(w,INPUT, homogenize, noSign)
 
 if(~exist('homogenize','var'))
     homogenize = false;
+end
+
+if(~exist('noSign','var'))
+    noSign = false;
 end
 
 if homogenize
@@ -15,7 +19,12 @@ CLASSES = zeros(N,1);
 
 
 for i = 1:N
-    CLASSES(i) = sign(dot(w,INPUT(:,i)));
+    dotProduct = dot(w,INPUT(:,i));
+    if noSign
+        CLASSES(i) = dotProduct;
+    else
+        CLASSES(i) = sign(dotProduct);
+    end
 end
 
 end
