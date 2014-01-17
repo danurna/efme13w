@@ -8,7 +8,7 @@ TR = normalizeInput(features_class(:,1:20));
 [TR TRC TS TSC] = splitDataIntoTestAndTraining( ...
     TR, ...
     features_class(:,21), ...
-    0.5, ...
+    0.8, ...
     1 ...
 );
 
@@ -18,9 +18,14 @@ TRC(TRC == 6) = -1;
 TRC(TRC > 2) = TRC(TRC > 2) +1;
 TRC(TRC == -1) = 3;
 
+TSC(TSC == 6) = -1;
+TSC(TSC > 2) = TSC(TSC > 2) +1;
+TSC(TSC == -1) = 3;
+
 if (true)
    FeatureSelection(TR, TRC, TS, TSC) 
 end
+
 
 clearvars features_class;
 
@@ -44,7 +49,6 @@ lead = @(x) x==1;
 chalk = @(x) x==2;
 
 epoch = 200;
-
 
 [wetDryTrainTarget wetDryTestTarget] = splitInTwo(TRC, ...
     TSC , wet);
@@ -81,4 +85,11 @@ wLead = perco(TR(~wet(TRC),:), leadTrainTarget,...
 
 wChalk = perco(TR(and(~wet(TRC), ~lead(TRC)),:), chalkTrainTarget,...
     epoch, true);
+
+a = percClassify(wWet,TS,true);
+wet = TS(wetDryTestTarget==1,:);
+b = percClassify(wPaint,wet,true);
+paint = wet(b==1,:);
+c = percClassify(wPen,paint,true);
+pen = paint(c==1,:);
 

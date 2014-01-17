@@ -31,7 +31,8 @@ while ( ~allGood && count < MAXEPOCH )
     if calcBest
         classified = percClassify(W,INPUT);
         effective = nnz(classified == TARGET);
-        if effective > maxEffective
+        if effective >= maxEffective
+            maxEffective = effective;
             bestW = W;
             bestClassified = classified;
         end
