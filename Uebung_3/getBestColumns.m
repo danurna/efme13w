@@ -56,7 +56,7 @@ for i = 1:colNum
             PERCOTEST = vertcat(tmp', tmp2');
             PERCOTESTPRECLASSIFIED = TESTCLASSES;
              
-            [W, ~, ~] = perco(PERCOTRAIN, PERCOTRAINPRECLASSIFIED, 10, true);
+            [W, ~, ~] = perco(PERCOTRAIN, PERCOTRAINPRECLASSIFIED, 10, true, true);
              
             PERCOTESTCLASSIFIED = percClassify(W,PERCOTEST);
              

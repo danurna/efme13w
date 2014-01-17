@@ -1,11 +1,4 @@
-load('data/strokefeatures.mat');
-
-[TRAIN TRAINCLASSES TEST TESTCLASSES] = splitDataIntoTestAndTraining( ...
-    features_class(:,1:10), ...
-    features_class(:,21), ...
-    0.7, ...
-    1 ...
-);
+function [mahalFeatures, knnFeatures, percoFeatures, globalBestFeatures] = FeatureSelection(TRAIN, TRAINCLASSES, TEST, TESTCLASSES)
 
 PERCOTRAIN = vertcat(ones(size(TRAINCLASSES))',TRAIN');
 
@@ -24,10 +17,10 @@ TSC = wetDryTest;
 TRC = wetDryTrain;
 i = 0;
 dispstat(sprintf('Finding best features for Test Set %d',i),'keepthis');
-        
-mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis');
-knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20);
-percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron');
+            
+%mahalFeatures = getBestColumns(TS,TSC,TR,TRC,'mahalanobis')
+%knnFeatures = getBestColumns(TS,TSC,TR,TRC,'knn',1:20)
+percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron')
       
         tmp = intersect(mahalFeatures(:,4), knnFeatures(:,4));
         tmp2 = cell(numel(tmp)*2,4);
@@ -45,3 +38,6 @@ percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron');
             globalBestFeatures = bestFeaturesPerSet{i}(:,4);
         end
         dispstat(sprintf('%s\n\n',repmat('-',1,37)),'keepthis','keepFinding best features for Test Set 0');
+        
+        
+end

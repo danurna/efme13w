@@ -18,6 +18,10 @@ TRC(TRC == 6) = -1;
 TRC(TRC > 2) = TRC(TRC > 2) +1;
 TRC(TRC == -1) = 3;
 
+if (true)
+   FeatureSelection(TR, TRC, TS, TSC) 
+end
+
 clearvars features_class;
 
 bestFeautures = 1:10;
