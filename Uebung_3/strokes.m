@@ -20,10 +20,16 @@ TRC(TRC == -1) = 3;
     1 ...
     );
 
-if (false)
-    [mahalFeatures, knnFeatures, percoFeatures, globalBestFeatures] = FeatureSelection(TROrig, TRC, TSOrig, TSC);
-end
+% if (false)
+%     [mahalFeatures, knnFeatures, percoFeatures, globalBestFeatures] =
+%     FeatureSelection(TROrig, TRC, TSOrig, TSC);
+% else
+%     load('bestFeatures.mat')
+% end
 
+maxFeatures = 5;
+val = cellfun(@length, globalBestFeatures);
+out = globalBestFeatures(val < (2*maxFeatures)+maxFeatures);
 
 clearvars features_class;
 
@@ -69,9 +75,7 @@ for j=36%1:numel(out)
     knnResults = tryAndPlotEveryK(TS,TSC,TR,TRC);
     [effective k] = max(knnResults);
     effective = 100*effective;
-    if effective < 50
-        continue;
-    end
+    
     
     fprintf('%.2f%% maximum at k = %d\n' , effective, k);
     total = total + effective;
@@ -98,18 +102,23 @@ for j=36%1:numel(out)
     
     fprintf('%-30s', sprintf('Perceptron (%d Epochs): ', epoch));
     percResult = perceptron(TS,TR,TRC,epoch,true);
-    effective = 100*nnz(percResult == TSC)/numTS;
-    if effective < 50
-        continue;
-    end
-    fprintf('%.2f%% correct\n',effective);
+    
+    classifiedIDX = percResult > 0;
+    numUnclassified = numel(percResult(~classifiedIDX));
+    numClassified = numTS-numUnclassified;
+    
+    percResult = percResult(classifiedIDX);
+    effective = 100*nnz(percResult == TSC(classifiedIDX))/numClassified;
+    
+    fprintf('%.2f%% correct\n%-30s(only %.2f%% classified)', ...
+        effective,' ', 100*numClassified/numTS);
     total = total + effective;
     
     %line([1 numTS],[effective effective], 'LineStyle','--', 'Color', 'g')
     %legend('K-NN','Mahalanobis','Perceptron');
     %hold off;
     
-    fprintf('\n%s\n',sep);
+    fprintf('\n\n%s\n',sep);
     fprintf('Added effectiveness = %.2f, Wet/Dry = %.2f, INDEX = %d', total, wetDry, j);
     if total > mxTot
         mxTot = total;

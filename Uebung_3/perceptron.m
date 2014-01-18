@@ -20,7 +20,7 @@ if numClass > 2
     end
     
     [mx, classified] = max(results, [], 2);
-    %classified(mx<0) = -1;
+    classified(mx<0) = -1;
 else
     w = perco(TR,TRC,epoch,true);
     classified = percClassify(w,TS);
