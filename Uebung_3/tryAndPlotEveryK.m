@@ -21,7 +21,7 @@ for k = 1:elements-1
 end
 
 figure;
-plot(effective, 'b-o');
+plot(100*effective, 'b-o');
 title('Effectivness of different classifiers');
 
 xlabel('k');

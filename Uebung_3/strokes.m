@@ -1,4 +1,4 @@
-dispstat(sprintf('\n\n\n%s',repmat('#',1,30)),'keepprev','keepthis');
+dispstat(sprintf('\n\n\n%s',repmat('#',1,60)),'keepprev','keepthis');
 dispstat('STROKES','keepprev');
 
 load('data/strokefeatures.mat');
@@ -22,7 +22,7 @@ TRC(TRC == -1) = 3;
 
 clearvars features_class;
 
-bestFeautures = 1:10;
+bestFeautures = [1 3 7 8];
 
 TR = TR(:,bestFeautures);
 TS = TS(:,bestFeautures);
@@ -30,11 +30,13 @@ TS = TS(:,bestFeautures);
 numTR = numel(TRC);
 numTS = numel(TSC);
 
+epoch = 100;
+
 fprintf('%s','Wet/Dry with Perceptron: ');
 [wTRC wTSC] = splitInTwo(TRC, TSC , @(x) x>3);
 percResult = perceptron(TS,TR,wTRC,epoch);
-effective = nnz(percResult == wTSC)/numTS;
-fprintf('%.2f%% correct\n' , effective*100);
+effective = 100*nnz(percResult == wTSC)/numTS;
+fprintf('%.2f%% correct\n' , effective);
 
 
 fprintf('%s\nClassifying between 6 classes\n',repmat('#',1,60));
@@ -48,13 +50,11 @@ hold on;
 
 fprintf('%-30s','Mahalanobis: ');
 mahalResult = classify(TS, TR, TRC,'mahalanobis');
-effective = nnz(mahalResult == TSC)/numTS;
-fprintf('%.2f%% correct\n',100*effective);
+effective = 100*nnz(mahalResult == TSC)/numTS;
+fprintf('%.2f%% correct\n',effective);
 
 line([1 numTS],[effective effective], 'LineStyle','--', 'Color', 'r')
 hold on;
-
-epoch = 1000;
 
 fprintf('%-30s', sprintf('Perceptron (%d Epochs): ', epoch));
 results = zeros(numTS,6);
@@ -69,8 +69,8 @@ end
 
 
 [~, percResult] = max(results, [], 2);
-effective = nnz(percResult == TSC)/numTS;
-fprintf('%.2f%% correct\n',100*effective);
+effective = 100*nnz(percResult == TSC)/numTS;
+fprintf('%.2f%% correct\n',effective);
 
 line([1 numTS],[effective effective], 'LineStyle','--', 'Color', 'g')
 legend('K-NN','Mahalanobis','Perceptron');

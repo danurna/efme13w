@@ -39,7 +39,7 @@ for i = 1 : numOfClasses
     Classes{i} = TRAIN(TRAINCLASSES == uniqueClasses(i),:);
 end
 
-[INVC MEANS] = computeInverse(Classes,EQUALCOV);
+[COVs MEANS] = computeInverse(Classes,EQUALCOV);
 
 numOfTestValues = size(TEST, 1);
 
@@ -50,7 +50,7 @@ TESTCLASS = zeros(numOfTestValues,1);
 for i = 1 : numOfClasses
     for j = 1 : numOfTestValues
         diff = (TEST(j,:)-MEANS{i});
-        tmpDist = diff * INVC{i} * diff';
+        tmpDist = diff / COVs{i} * diff';
         
         if tmpDist < dist(j)
             dist(j) = tmpDist;
@@ -61,33 +61,30 @@ end
 
 end
 
-function [INVC MEANS] = computeInverse(Classes, EQUALCOV)
+function [COVs MEANS] = computeInverse(Classes, EQUALCOV)
 
 numOfClasses = size(Classes,1);
 MEANS = cell(numOfClasses,1);
-INVC = cell(numOfClasses,1);
-COV = zeros(size(Classes{1},2));
+COVs = cell(numOfClasses,1);
+eqCOV = zeros(size(Classes{1},2));
 N = 0;
 
 for i = 1 : numOfClasses
     currentClass = Classes{i};
     currentMean = mean(currentClass);
     MEANS{i} = currentMean;
-    N = N + size(currentClass,1);
     
     if EQUALCOV
-        for j = 1 : size(currentClass,1)
-            diff = (currentClass(j,:) - currentMean);
-            COV = COV + diff' * diff;
-        end
+        N = N + size(currentClass,1);
+        eqCOV = eqCOV + diag(var(currentClass));
     else
-        INVC{i} = inv(cov(currentClass));
+        COVs{i} = cov(currentClass);
     end
     
 end
 
 if EQUALCOV
-    COV = COV ./ (N-1);
-    INVC(1:3) = {diag(diag(inv(COV)))};
+    eqCOV = eqCOV ./ (N-1);
+    COVs(1:3) = {eqCOV};
 end
 end

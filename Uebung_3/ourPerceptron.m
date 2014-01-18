@@ -1,4 +1,4 @@
-dispstat(repmat('#',1,30),'keepprev','keepthis');
+dispstat(repmat('#',1,60),'keepprev','keepthis');
 dispstat('PERCEPTRON','keepthis');
 
 
