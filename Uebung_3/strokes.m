@@ -31,17 +31,15 @@ maxFeatures = 5;
 val = cellfun(@length, globalBestFeatures);
 out = globalBestFeatures(val < (2*maxFeatures)+maxFeatures);
 
-out = out(1:10);
+%out = out(1:3);
 
 clearvars features_class;
 
 
 %bestFeautures = [1 3 5 7];
 
-knns = zeros(1,numel(out));
-mahals = knns;
-percs = zeros(2,numel(out));
-wets = knns;
+sixClass = zeros(3,numel(out));
+wets = sixClass;
 
 for j=1:numel(out)
     
@@ -68,7 +66,7 @@ for j=1:numel(out)
     
     percResult = perceptron(TS,TR,wTRC,epoch);
     effective = 100*nnz(percResult == wTSC)/numTS;
-    wets(j) = effective;
+    wets(1,j) = effective;
     
     fprintf('%.2f%% correct\n' , effective);
     
@@ -78,6 +76,7 @@ for j=1:numel(out)
     knnResult = tryAndPlotEveryK(TS,wTSC,TR,wTRC);
     effective = max(knnResult);
     effective = 100*effective;
+    wets(2,j) = effective;
     
     fprintf('%.2f%% correct\n' , effective);
     
@@ -86,8 +85,8 @@ for j=1:numel(out)
     fprintf('Mahalanobis: ');
     
     mahalResult = mahalClassify(TS,TR,wTRC);
-    
     effective = 100*nnz(mahalResult == wTSC)/numTS;
+    wets(3,j) = effective;
     
     fprintf('%.2f%% correct\n' , effective);
     
@@ -98,8 +97,7 @@ for j=1:numel(out)
     knnResults = tryAndPlotEveryK(TS,TSC,TR,TRC);
     [effective k] = max(knnResults);
     effective = 100*effective;
-    
-    knns(j) = effective;
+    sixClass(1,j) = effective;
     
     fprintf('%.2f%% maximum at k = %d\n' , effective, k);
     total = total + effective;
@@ -115,7 +113,7 @@ for j=1:numel(out)
     
     mahalResult = mahalClassify(TS, TR, TRC);
     effective = 100*nnz(mahalResult == TSC)/numTS;
-    mahals(j) = effective;
+    sixClass(2,j) = effective;
     
     fprintf('%.2f%% correct\n',effective);
     total = total + effective;
@@ -131,14 +129,18 @@ for j=1:numel(out)
     numUnclassified = numel(percResult(~classifiedIDX));
     numClassified = numTS-numUnclassified;
     
-    percResult = percResult(classifiedIDX);
-    effective = 100*nnz(percResult == TSC(classifiedIDX))/numClassified;
+    classifiedResult = percResult(classifiedIDX);
+    effective = 100*nnz(percResult == TSC)/numTS;
     
-    percs(1,j) = effective;
-    percs(2,j) = 100*numUnclassified/numTS;
+    classifiedEffective = 100*nnz(classifiedResult == TSC(classifiedIDX))/numClassified;
+    classified = 100*numClassified/numTS;
     
-    fprintf('%.2f%% correct\n%-30s(only %.2f%% classified)\n', ...
-        effective,' ', 100*numClassified/numTS);
+    sixClass(3,j) = effective;
+    
+    
+    
+    fprintf('%.2f%%\n%-30s(only %.2f%% classified\n%-31s%.2f%% of which correctly)\n', ...
+        effective, ' ', classified,' ', classifiedEffective);
     total = total + effective;
     
     %line([1 numTS],[effective effective], 'LineStyle','--', 'Color', 'g')
@@ -148,8 +150,16 @@ for j=1:numel(out)
 end
 
 figure;
-plot(knns, 'b-o'); hold on;
-plot(mahals, 'r-o'); hold on;
-plot(percs(1,:), 'm-o'); hold on;
-plot(percs(2,:), 'c--'); hold off;
-legend('KNN','Mahalanobis','Perceptron','Perceptron - Unclassified');
+plot(wets(1,:), 'r-o'); hold on;
+plot(wets(2,:), 'g-o'); hold on;
+plot(wets(3,:), 'b-o'); 
+legend('KNN','Mahalanobis','Perceptron'); hold off;
+
+
+figure;
+
+plot(sixClass(1,:), 'r-o'); hold on;
+plot(sixClass(2,:), 'g-o'); hold on;
+plot(sixClass(3,:), 'b-o'); 
+legend('KNN','Mahalanobis','Perceptron'); hold off;
+
