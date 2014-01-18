@@ -12,7 +12,6 @@ TRC(TRC == 6) = -1;
 TRC(TRC > 2) = TRC(TRC > 2) +1;
 TRC(TRC == -1) = 3;
 
-
 [TR TRC TS TSC] = splitDataIntoTestAndTraining( ...
     TR, ...
     TRC, ...
@@ -20,9 +19,14 @@ TRC(TRC == -1) = 3;
     1 ...
 );
 
+if (false)
+   [mahalFeatures, knnFeatures, percoFeatures, globalBestFeatures] = FeatureSelection(TR, TRC, TS, TSC); 
+end
+
+
 clearvars features_class;
 
-bestFeautures = [1 3 7 8];
+bestFeautures = [1 3 5 7];
 
 TR = TR(:,bestFeautures);
 TS = TS(:,bestFeautures);

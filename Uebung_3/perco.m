@@ -1,11 +1,12 @@
-function [W, count, bestClassified] = perco(INPUT, TARGET, MAXEPOCH, calcBest)
+function [W, count, bestClassified] = perco(INPUT, TARGET, MAXEPOCH, calcBest, hasHomogenous)
 %INPUT in following form: columns are features, lines are entities
 
 entities = size(INPUT,1);
-homogen = ones(1,entities);
 
-INPUT = vertcat(homogen,INPUT');
-
+if( ~exist('hasHomogenous','var') )
+    homogen = ones(1,entities);
+    INPUT = vertcat(homogen,INPUT');
+end
 
 if(~exist('calcBest','var'))
     calcBest = false;
