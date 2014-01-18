@@ -31,7 +31,7 @@ percoFeatures = getBestColumns(TS, TSC, TR, TRC, 'perceptron');
           %  tmp2(r,:) = mahalFeatures(strcmp(mahalFeatures(:,4),tmp(x)),:);
         %end
         globalBestFeatures = tmp;
-        bestFeaturesPerSet{i} = tmp;
+        %bestFeaturesPerSet{i} = tmp;
         
         %if i ~= 1
         %    globalBestFeatures = intersect(globalBestFeatures,bestFeaturesPerSet{i}(:,4));
