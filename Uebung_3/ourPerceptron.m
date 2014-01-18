@@ -3,6 +3,11 @@ dispstat('PERCEPTRON','keepthis');
 
 
 inputs = load('data/perceptrondata.dat');
+
+entities = size(inputs,1);
+homogen = ones(1,entities);
+inputs = vertcat(homogen,inputs);
+
 target = cell(2,1);
 target{1} = load('data/perceptrontarget1.dat');
 target{2} = load('data/perceptrontarget2.dat');
@@ -11,11 +16,10 @@ target{1}(target{1} == 0) = -1;
 target{2}(target{2} == 0) = -1;
 
 
-TWOBIT = [
-    0 0
-    1 0
-    0 1
-    1 1
+TWOBIT = [ 
+    1 1 1 1
+    0 1 0 1
+    0 0 1 1
     ];
 
 logic = cell(3,1);

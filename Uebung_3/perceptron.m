@@ -4,6 +4,16 @@ if ~exist('noSign','var')
     noSign = false;
 end
 
+
+TS_entities = size(TS,1);
+homogen = ones(1,TS_entities);
+TS = vertcat(homogen,TS');
+
+TR_entities = size(TS,1);
+homogen = ones(1,TR_entities);
+TR = vertcat(homogen,TR');
+
+
 numClass = numel(unique(TRC));
 results = zeros(size(TS,1),numClass);
 

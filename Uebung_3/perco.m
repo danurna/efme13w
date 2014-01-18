@@ -1,12 +1,5 @@
-function [W, count, bestClassified] = perco(INPUT, TARGET, MAXEPOCH, calcBest)
+function [W, count, bestClassified] = perco(HOMOGENIZED, TARGET, MAXEPOCH, calcBest)
 %INPUT in following form: columns are features, lines are entities
-
-entities = size(INPUT,1);
-
-
-homogen = ones(1,entities);
-HOMOGENIZED = vertcat(homogen,INPUT');
-
 
 if(~exist('calcBest','var'))
     calcBest = false;
@@ -15,7 +8,7 @@ if(~exist('calcBest','var'))
     end
 end
 
-N = entities;
+N = size(HOMOGENIZED,1);
 W = repmat(0.1,size(HOMOGENIZED,1),1);
 gamma = 0.5;
 
@@ -29,7 +22,7 @@ while ( ~allGood && count < MAXEPOCH )
     allGood = true;
     
     if calcBest
-        classified = percClassify(W,INPUT);
+        classified = percClassify(W,HOMOGENIZED);
         effective = nnz(classified == TARGET);
         if effective >= maxEffective
             maxEffective = effective;

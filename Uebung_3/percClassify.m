@@ -4,12 +4,6 @@ if(~exist('noSign','var'))
     noSign = false;
 end
 
-
-entities = size(INPUT,1);
-homogen = ones(1,entities);
-INPUT = vertcat(homogen,INPUT');
-
-
 N = size(INPUT,2);
 CLASSES = zeros(N,1);
 
