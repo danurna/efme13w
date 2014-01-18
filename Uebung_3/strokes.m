@@ -31,21 +31,25 @@ maxFeatures = 5;
 val = cellfun(@length, globalBestFeatures);
 out = globalBestFeatures(val < (2*maxFeatures)+maxFeatures);
 
+out = out(1:10);
+
 clearvars features_class;
 
 
 %bestFeautures = [1 3 5 7];
 
-mxTot = 0;
-mxIdx = -1;
+knns = zeros(1,numel(out));
+mahals = knns;
+percs = zeros(2,numel(out));
+wets = knns;
 
-for j=36%1:numel(out)
+for j=1:numel(out)
     
     total = 0;
     
     
     bestFeatures = str2num(out{j}); %#ok<ST2NM>
-    fprintf('Using following features: %s\n',sprintf('%d ',bestFeatures));
+    fprintf('INDEX = %d | Using following features: %s\n', j, sprintf('%d ',bestFeatures));
     fprintf('\n%s\n#%33s%26s\n%s\n',sep,'WET/DRY','#',sep);
     
     
@@ -57,17 +61,36 @@ for j=36%1:numel(out)
     
     epoch = 100;
     
-    fprintf('%s','Wet/Dry with Perceptron: ');
+    
     [wTRC wTSC] = splitInTwo(TRC, TSC , @(x) x>3);
+    
+    fprintf('Perceptron (%d Epochs): ',epoch);
+    
     percResult = perceptron(TS,TR,wTRC,epoch);
     effective = 100*nnz(percResult == wTSC)/numTS;
-    if effective < 50
-        continue;
-    end
+    wets(j) = effective;
     
-    fprintf('%.2f%% correct\n\n\n' , effective);
+    fprintf('%.2f%% correct\n' , effective);
     
-    wetDry = effective;
+    
+    fprintf('K-NN: ');
+    
+    knnResult = tryAndPlotEveryK(TS,wTSC,TR,wTRC);
+    effective = max(knnResult);
+    effective = 100*effective;
+    
+    fprintf('%.2f%% correct\n' , effective);
+    
+    
+    
+    fprintf('Mahalanobis: ');
+    
+    mahalResult = mahalClassify(TS,TR,wTRC);
+    
+    effective = 100*nnz(mahalResult == wTSC)/numTS;
+    
+    fprintf('%.2f%% correct\n' , effective);
+    
     
     fprintf('\n%s\n#%45s%14s\n%s\n',sep,'Classifying between 6 classes','#',sep);
     
@@ -76,6 +99,7 @@ for j=36%1:numel(out)
     [effective k] = max(knnResults);
     effective = 100*effective;
     
+    knns(j) = effective;
     
     fprintf('%.2f%% maximum at k = %d\n' , effective, k);
     total = total + effective;
@@ -88,11 +112,11 @@ for j=36%1:numel(out)
     %hold on;
     
     fprintf('%-30s','Mahalanobis: ');
-    mahalResult = classify(TS, TR, TRC,'mahalanobis');
+    
+    mahalResult = mahalClassify(TS, TR, TRC);
     effective = 100*nnz(mahalResult == TSC)/numTS;
-    if effective < 50
-        continue;
-    end
+    mahals(j) = effective;
+    
     fprintf('%.2f%% correct\n',effective);
     total = total + effective;
     
@@ -110,7 +134,10 @@ for j=36%1:numel(out)
     percResult = percResult(classifiedIDX);
     effective = 100*nnz(percResult == TSC(classifiedIDX))/numClassified;
     
-    fprintf('%.2f%% correct\n%-30s(only %.2f%% classified)', ...
+    percs(1,j) = effective;
+    percs(2,j) = 100*numUnclassified/numTS;
+    
+    fprintf('%.2f%% correct\n%-30s(only %.2f%% classified)\n', ...
         effective,' ', 100*numClassified/numTS);
     total = total + effective;
     
@@ -118,16 +145,11 @@ for j=36%1:numel(out)
     %legend('K-NN','Mahalanobis','Perceptron');
     %hold off;
     
-    fprintf('\n\n%s\n',sep);
-    fprintf('Added effectiveness = %.2f, Wet/Dry = %.2f, INDEX = %d', total, wetDry, j);
-    if total > mxTot
-        mxTot = total;
-        mxIdx = j;
-    end
-    
-    fprintf('\n%s\n',sep);
-    
 end
 
-disp(mxTot);
-disp(mxIdx);
+figure;
+plot(knns, 'b-o'); hold on;
+plot(mahals, 'r-o'); hold on;
+plot(percs(1,:), 'm-o'); hold on;
+plot(percs(2,:), 'c--'); hold off;
+legend('KNN','Mahalanobis','Perceptron','Perceptron - Unclassified');
