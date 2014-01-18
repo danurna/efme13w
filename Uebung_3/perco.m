@@ -1,22 +1,22 @@
-function [W, count, bestClassified] = perco(INPUT, TARGET, MAXEPOCH, calcBest, hasHomogenous)
+function [W, count, bestClassified] = perco(INPUT, TARGET, MAXEPOCH, calcBest)
 %INPUT in following form: columns are features, lines are entities
 
 entities = size(INPUT,1);
 
-if( ~exist('hasHomogenous','var') )
-    homogen = ones(1,entities);
-    INPUT = vertcat(homogen,INPUT');
-end
+
+homogen = ones(1,entities);
+HOMOGENIZED = vertcat(homogen,INPUT');
+
 
 if(~exist('calcBest','var'))
     calcBest = false;
     if nargout > 2
-       error('When trying to get bestClassified, calcBest must be set!'); 
+        error('When trying to get bestClassified, calcBest must be set!');
     end
 end
 
 N = entities;
-W = repmat(0.1,size(INPUT,1),1);
+W = repmat(0.1,size(HOMOGENIZED,1),1);
 gamma = 0.5;
 
 allGood = false;
@@ -39,7 +39,7 @@ while ( ~allGood && count < MAXEPOCH )
     end
     
     for i = 1:N
-        unWeighted = INPUT(:,i)*TARGET(i);
+        unWeighted = HOMOGENIZED(:,i)*TARGET(i);
         if dot(W,unWeighted) < 0
             W = W + gamma*unWeighted;
             allGood = false;

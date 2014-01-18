@@ -1,18 +1,14 @@
-function CLASSES = percClassify(w,INPUT, homogenize, noSign)
-
-if(~exist('homogenize','var'))
-    homogenize = false;
-end
+function CLASSES = percClassify(w,INPUT, noSign)
 
 if(~exist('noSign','var'))
     noSign = false;
 end
 
-if homogenize
-    entities = size(INPUT,1);
-    homogen = ones(1,entities);
-    INPUT = vertcat(homogen,INPUT');
-end
+
+entities = size(INPUT,1);
+homogen = ones(1,entities);
+INPUT = vertcat(homogen,INPUT');
+
 
 N = size(INPUT,2);
 CLASSES = zeros(N,1);
