@@ -9,13 +9,13 @@ TS_entities = size(TS,1);
 homogen = ones(1,TS_entities);
 TS = vertcat(homogen,TS');
 
-TR_entities = size(TS,1);
+TR_entities = size(TR,1);
 homogen = ones(1,TR_entities);
 TR = vertcat(homogen,TR');
 
 
 numClass = numel(unique(TRC));
-results = zeros(size(TS,1),numClass);
+results = zeros(size(TS,2),numClass);
 
 if numClass > 2
     for i = 1 : numClass

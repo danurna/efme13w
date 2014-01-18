@@ -6,7 +6,7 @@ inputs = load('data/perceptrondata.dat');
 
 entities = size(inputs,1);
 homogen = ones(1,entities);
-inputs = vertcat(homogen,inputs);
+inputs = vertcat(homogen,inputs');
 
 target = cell(2,1);
 target{1} = load('data/perceptrontarget1.dat');
@@ -39,7 +39,7 @@ for i = 1 : numel(logic)
     figure(figH); figH = figH+1;
     
     [w, count] = perco(TWOBIT,logic{i}.target,100,true);
-    gscatter(TWOBIT(:,1),TWOBIT(:,2),logic{i}.target); hold on;
+    gscatter(TWOBIT(2,:),TWOBIT(3,:),logic{i}.target); hold on;
     ezplot(@(x,y) w(1) + w(2)*x + w(3)*y);
     axis(range);
     title(logic{i}.name);
@@ -55,10 +55,11 @@ for i = 1 : numel(target);
     [w, count] = perco(inputs,target{i},100, true);
     
     figure(figH); figH = figH+1;
-    gscatter(inputs(:,1),inputs(:,2),target{i}); hold on;
+    gscatter(inputs(2,:),inputs(3,:),target{i}); hold on;
     ezplot(@(x,y) w(1) + w(2)*x + w(3)*y);
     axis(range);
     title(sprintf('%s%d','Target #',i));
     
     hold off;
 end
+

@@ -8,7 +8,7 @@ if(~exist('calcBest','var'))
     end
 end
 
-N = size(HOMOGENIZED,1);
+N = size(HOMOGENIZED,2);
 W = repmat(0.1,size(HOMOGENIZED,1),1);
 gamma = 0.5;
 
@@ -33,6 +33,7 @@ while ( ~allGood && count < MAXEPOCH )
     
     for i = 1:N
         unWeighted = HOMOGENIZED(:,i)*TARGET(i);
+        
         if dot(W,unWeighted) < 0
             W = W + gamma*unWeighted;
             allGood = false;
