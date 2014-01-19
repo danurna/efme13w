@@ -27,10 +27,10 @@ TRC(TRC == -1) = 3;
 %     load('bestFeatures.mat')
 % end
 
-maxFeatures = 5;
-val = cellfun(@length, globalBestFeatures);
-out = globalBestFeatures(val <= (3*maxFeatures)-1);
-out = out(1);
+%maxFeatures = 5;
+%val = cellfun(@length, globalBestFeatures);
+%out = globalBestFeatures(val <= (3*maxFeatures)-1);
+%out = out(1);
 
 
 useBestFeaturesFound = true;
