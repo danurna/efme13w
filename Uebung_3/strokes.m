@@ -6,8 +6,8 @@ load('data/strokefeatures.mat');
 
 TR = normalizeInput(features_class(:,1:20));
 
-%Changing class labels so that dry is 1,2,3 and wet 4,5,6
-
+% Changing class labels so that dry is 1 (black lead), 2 (black chalk),
+% 3 (silver point) and wet 4 (paint brush), 5 (reed pen), 6 (goose quill).
 TRC = features_class(:,21);
 TRC(TRC == 6) = -1;
 TRC(TRC > 2) = TRC(TRC > 2) +1;
@@ -31,12 +31,14 @@ maxFeatures = 5;
 val = cellfun(@length, globalBestFeatures);
 out = globalBestFeatures(val < (2*maxFeatures)+maxFeatures);
 
-%out = out(1:3);
+
+useBestFeaturesFound = true;
+if( useBestFeaturesFound ) 
+    clearvars out;
+    out{1} = '1 10 13 16 17';
+end
 
 clearvars features_class;
-
-
-%bestFeautures = [1 3 5 7];
 
 sixClass = zeros(3,numel(out));
 wets = sixClass;
