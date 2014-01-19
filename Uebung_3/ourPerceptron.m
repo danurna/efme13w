@@ -36,7 +36,7 @@ logic{3}.target = [-1; 1; 1; -1];
 range = [-0.5 1.5 -0.5 1.5];
 
 for i = 1 : numel(logic)
-    figure(figH); figH = figH+1;
+    figure;
     
     [w, count] = perco(TWOBIT,logic{i}.target,100,true);
     gscatter(TWOBIT(2,:),TWOBIT(3,:),logic{i}.target); hold on;
@@ -54,7 +54,7 @@ range = [0 1 0 1];
 for i = 1 : numel(target);
     [w, count] = perco(inputs,target{i},100, true);
     
-    figure(figH); figH = figH+1;
+    figure;
     gscatter(inputs(2,:),inputs(3,:),target{i}); hold on;
     ezplot(@(x,y) w(1) + w(2)*x + w(3)*y);
     axis(range);
